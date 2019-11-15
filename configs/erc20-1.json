@@ -1,0 +1,6 @@
+{
+    "description": "ERC20-moloch simulates OZ ERC20",
+    "source": "Token/ERC20-molochventures/ERC20.impl.sol",
+    "target": "Token/ERC20-openzeppelin/ERC20.spec.sol",
+    "states": 23
+}
