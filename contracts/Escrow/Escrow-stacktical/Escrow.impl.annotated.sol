@@ -1,4 +1,4 @@
-pragma solidity >=0.5.0;
+pragma solidity ^0.5.0;
 
 
 // Link to contract source code:
@@ -6,7 +6,7 @@ pragma solidity >=0.5.0;
 
 
 /**
- * @notice simulation  __verifier_eq(Escrow_Stacktical.deposits, Escrow.deposits)
+ * @notice simulation  __verifier_eq(Escrow_Stacktical.deposits, Escrow_spec.deposits)
  */
 /// @notice simulation __verifier_eq(Escrow_Stacktical$deposits, Escrow_spec$deposits)
 contract Escrow_Stacktical {

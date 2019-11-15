@@ -9,7 +9,7 @@ IGNORED_KEYS="description"
 COMMAND="sc-simulation"
 TIMESTAMP=$(date +"%Y:%m:%d:%H:%M:%S")
 OUTPUT="$(pwd)/output:${TIMESTAMP}"
-DRYRUN=1
+DRYRUN=
 
 mkdir -p $OUTPUT
 
