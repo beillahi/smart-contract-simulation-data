@@ -1,5 +1,5 @@
 {
     "description": "Voting 0x34da3ccbea4e077421e4dc217e648cbb1beb4731 simulates Voting Voting-Dapp",
-    "source": "Voting/0x34da3ccbea4e077421e4dc217e648cbb1beb4731/Voting.impl.sol",
+    "source": "Voting/0x34da3ccbea4e077421e4dc217e648cbb1beb4731/Voting-impl.sol",
     "target": "Voting/Voting-Voting-Dapp/Voting.spec.sol"
 }
