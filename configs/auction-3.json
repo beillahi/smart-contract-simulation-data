@@ -1,0 +1,11 @@
+{
+    "description": "Simple auction 0x207ff240d2f5baaefce160785f38ebd5d7bbdce4 test",
+    "source": "Auction/0x207ff240d2f5baaefce160785f38ebd5d7bbdce4/Auction-impl.sol",
+    "target": "Auction/Simple_Blind_Auction_Ethereum/Auction-spec.sol",
+    "states": 39,
+    "num-accounts": 0,
+    "balances": 100000,
+    "payments": 2,
+    "num-examples": 370,
+    "unsigned-integers": "{0,3}"
+}

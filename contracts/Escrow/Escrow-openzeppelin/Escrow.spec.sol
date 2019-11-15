@@ -31,7 +31,6 @@ contract Escrow_spec {
 		@notice modifies deposits[payee]
 		@notice modifies address(this).balance
 	*/
-
     function deposit(address payee) public onlyPrimary payable {
     	require(payee != address(0));
 		require(msg.value > 0);

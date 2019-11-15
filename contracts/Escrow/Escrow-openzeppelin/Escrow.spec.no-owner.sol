@@ -4,7 +4,7 @@ pragma solidity ^0.5.0;
 contract Escrow_spec {
 
     mapping(address=>uint) internal deposits ;
- 
+
 
     /** @notice precondition payee != address(0)
 	    @notice precondition msg.value > 0
@@ -25,17 +25,17 @@ contract Escrow_spec {
     }
 
 
-    /** @notice precondition payee != address(0)
+	/** @notice precondition payee != address(0)
         @notice precondition  deposits[payee] > 0
 		@notice precondition  payee != address(this)
+		@notice precondition  address(this).balance >= deposits[payee]
         @notice postcondition deposits[payee] == 0
-		@notice postcondition address(this).balance >= __verifier_old_uint(address(this).balance) - __verifier_old_uint(deposits[payee])
+		@notice postcondition address(this).balance == __verifier_old_uint(address(this).balance) - __verifier_old_uint(deposits[payee])
 		@notice modifies deposits[payee]
 		@notice modifies address(this).balance
 		@notice modifies payee.balance
 	*/
-
-    function withdraw(address payable payee) public {
+	function withdraw(address payable payee) public {
     	require(payee != address(0));
 		require(address(this).balance >= deposits[payee]);
 		//uint amount = deposits[payee];

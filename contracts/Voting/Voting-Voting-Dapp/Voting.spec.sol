@@ -21,7 +21,7 @@ we will pass an array of candidates who will be contesting in the election
     /** TODO notice postcondition __verifier_eq(candidateList, candidateNames)
         @notice modifies candidateList
     */
-    constructor(bytes32[] memory candidateNames) public{
+    constructor(bytes32[] memory candidateNames) public {
         candidateList = candidateNames;
     }
 

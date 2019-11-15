@@ -21,7 +21,7 @@ contract SimpleAuction {
     // Set to true at the end, disallows any change
     bool ended;
 
-    bool public $shadow$send$status;
+    bool public shadowSendStatus;
 
     // Events that will be fired on changes.
     event HighestBidIncreased(address bidder, uint amount);
@@ -78,7 +78,7 @@ contract SimpleAuction {
       @notice modifies pendingReturns[msg.sender]
       @notice modifies address(this).balance
       @notice modifies msg.sender.balance
-      @notice modifies $shadow$send$status
+      @notice modifies shadowSendStatus
    */
     function withdraw() public returns (bool) {
         uint amount = pendingReturns[msg.sender];
@@ -91,10 +91,10 @@ contract SimpleAuction {
             if (!msg.sender.send(amount)) {
                 // No need to call throw here, just reset the amount owing
                 pendingReturns[msg.sender] = amount;
-                $shadow$send$status = false;
+                shadowSendStatus = false;
                 return false;
             }
-            $shadow$send$status = true;
+            shadowSendStatus = true;
         }
         return true;
     }

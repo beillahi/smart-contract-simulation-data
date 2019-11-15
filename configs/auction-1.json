@@ -1,0 +1,11 @@
+{
+    "description": "Simple auction verification test",
+    "source": "Auction/Simple_Blind_Auction_llSourcell/Auction-impl.sol",
+    "target": "Auction/Simple_Blind_Auction_Ethereum/Auction-spec.sol",
+    "states": 39,
+    "num-accounts": 0,
+    "balances": 100000,
+    "payments": 2,
+    "num-examples": 370,
+    "unsigned-integers": "{0,3}"
+}
