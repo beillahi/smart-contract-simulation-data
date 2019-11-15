@@ -1,5 +1,8 @@
 {
     "description": "Escrow 0x0c5c553a0795db4b5e305ccf6c57fe885aadc0be simulates OZ Escrow",
     "source": "Escrow/0x0c5c553a0795db4b5e305ccf6c57fe885aadc0be/Escrow-impl.sol",
-    "target": "Escrow/Escrow-openzeppelin/Escrow.spec.sol"
+    "target": "Escrow/Escrow-openzeppelin/Escrow.spec.sol",
+    "states": 17,
+    "numaccounts": 0,
+    "payments": 2
 }
