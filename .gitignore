@@ -1,3 +1,5 @@
 SimulationCheck-*.sol
 *.internalized.sol
 *.bodiless.sol
+*.annotated.sol
+/.sc-simulation.ignore
