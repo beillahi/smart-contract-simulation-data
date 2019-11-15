@@ -1,0 +1,8 @@
+{
+    "description": "Simple lottery simulation",
+    "source": "Games/Lottery-impl/Lottery-impl.sol",
+    "target": "Games/Lottery/Lottery-spec.sol",
+    "states": 29,
+    "numaccounts": 0,
+    "payments": 2
+}
