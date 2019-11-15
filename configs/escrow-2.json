@@ -1,0 +1,5 @@
+{
+    "description": "Escrow 0xf0dfc51059b085f6ed0106f190e2d62300381259 simulates OZ Escrow",
+    "source": "Escrow/0xf0dfc51059b085f6ed0106f190e2d62300381259/Escrow-impl.sol",
+    "target": "Escrow/Escrow-openzeppelin/Escrow.spec.sol"
+}
