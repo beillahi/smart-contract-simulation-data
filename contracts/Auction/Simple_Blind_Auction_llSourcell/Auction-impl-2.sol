@@ -173,7 +173,7 @@ contract SimpleAuction_impl {
     // external contracts.
 
     // 1. Conditions
-    if (now < auctionStart + biddingTime)
+    if (now <= auctionStart + biddingTime)
       revert(); // auction did not yet end
     if (ended)
       revert(); // this function has already been called
