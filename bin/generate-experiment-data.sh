@@ -5,9 +5,9 @@ set -euxo pipefail
 eval "cd .."
 CURRENTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 PATH_to_CONFIG="${CURRENTDIR}/configs" 
-cmd_config="sc-simulation "
 
 for file in "${PATH_to_CONFIG}"/*; do
+    cmd_config="sc-simulation "
     Full_filename="${file}" 
     SOURCE=$(eval "jq .source ${Full_filename}")
     SOURCE="${SOURCE%\"}"
