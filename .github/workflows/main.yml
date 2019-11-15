@@ -12,7 +12,7 @@ jobs:
       with:
         repository: beillahi/smart-contract-explorer
         ref: refs/heads/release
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.GitHub_PAT }}
         submodules: recursive
     - uses: actions/setup-node@v1
       with:
