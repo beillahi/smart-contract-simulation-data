@@ -5,14 +5,14 @@ on: [push]
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: macOS-latest
 
     steps:
     - uses: actions/checkout@v1
       with:
         repository: beillahi/smart-contract-explorer
         ref: refs/heads/release
-        token: ${{ secrets.GitHub_PAT }}
+        token: ${{ secrets.GITHUB_TOKEN }}
         submodules: recursive
     - uses: actions/setup-node@v1
       with:
