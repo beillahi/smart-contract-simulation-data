@@ -31,29 +31,35 @@ do
     for key in $(jq -r 'keys[]' $file)
     do
         # read the value of the given key
-        value=$(jq -r .${key//-/} $file)
+        value=$(jq -r .\"$key\" $file)
 
-        # skip ignored keys and null values
-        if [[ " $IGNORED_KEYS " =~ " $key " || "$value" == "null" ]]
+        # skip null values
+        if [[ "$value" == "null" ]]
         then
+            echo Warning: null value for: $key
             continue
-        fi
+
+        # print out descriptions
+        elif [[ "$key" == "description" ]]
+        then
+            echo "about: $value"
+            continue
 
         # prepend the contracts path contract-path values
-        if [[ "$value" =~ .sol$ ]]
+        elif [[ "$value" =~ .sol$ ]]
         then
             value="$CONTRACTS/$value"
-        fi
-
-        # just generate files but don’t actually do much
-        if [[ -n $DRYRUN ]]
-        then
-            command="$command --no-examples --no-synthesize --no-verify"
         fi
 
         # append the key to the command
         command="$command --$key $value"
     done
+
+    # just generate files but don’t actually do much
+    if [[ -n $DRYRUN ]]
+    then
+        command="$command --no-examples --no-synthesize --no-verify"
+    fi
 
     # actually run the command
     echo Running command: $command
@@ -69,9 +75,14 @@ echo ---
 zip -r "$OUTPUT.zip" "$OUTPUT"
 echo ---
 
-if [[ $(command -v hub) ]]
+if [[ -n "$DRYRUN" ]]
+then
+    echo Skipping release because dryrun
+
+elif [[ $(command -v hub) ]]
 then
     hub release create -m "$TITLE" -a "$OUTPUT.zip" "$TAG"
+
 else
     echo Skipping release because hub not installed
 fi
