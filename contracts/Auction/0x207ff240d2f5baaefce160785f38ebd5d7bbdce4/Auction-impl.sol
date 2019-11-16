@@ -23,6 +23,34 @@ contract SimpleAuction {
 
     bool public shadowSendStatus;
 
+
+      function  Beneficiary() public view returns (address)
+  {
+      return  beneficiary;
+  }
+
+  function PendingReturns() public view returns (uint)
+  {
+        return pendingReturns[msg.sender];
+  }
+
+  function HighestBidder() public view returns (address)
+  {
+    return highestBidder;
+  }
+
+
+  function HighestBid() public view returns (uint)
+  {
+    return highestBid;
+  }
+
+
+  function AuctionStatus() public view returns (bool)
+  {
+        return ended;
+  }
+
     // Events that will be fired on changes.
     event HighestBidIncreased(address bidder, uint amount);
     event AuctionEnded(address winner, uint amount);
@@ -35,7 +63,7 @@ contract SimpleAuction {
     /// Create a simple auction with `_biddingTime`
     /// seconds bidding time on behalf of the
     /// beneficiary address `_beneficiary`.
-   constructor(address payable _beneficiary, uint _biddingTime) public {
+   constructor(uint _biddingTime, address payable _beneficiary) public {
         beneficiary = _beneficiary;
         auctionStart = now;
         biddingTime = _biddingTime;

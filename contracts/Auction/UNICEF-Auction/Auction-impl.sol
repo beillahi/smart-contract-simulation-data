@@ -44,6 +44,33 @@ contract SimpleAuction {
     // It will be shown when the user is asked to
     // confirm a transaction.
 
+      function  Beneficiary() public view returns (address)
+  {
+      return  beneficiary;
+  }
+
+  function PendingReturns() public view returns (uint)
+  {
+        return pendingReturns[msg.sender];
+  }
+
+  function HighestBidder() public view returns (address)
+  {
+    return highestBidder;
+  }
+
+
+  function HighestBid() public view returns (uint)
+  {
+    return highestBid;
+  }
+
+
+  function AuctionStatus() public view returns (bool)
+  {
+        return ended;
+  }
+
     /// Create a simple auction with `_biddingTime`
     /// seconds bidding time on behalf of the
     /// beneficiary address `_beneficiary`.
@@ -58,7 +85,7 @@ contract SimpleAuction {
       @notice modifies auctionStart
       @notice modifies biddingTime
    */
-    constructor(address payable _beneficiary, uint _biddingTime) public {
+    constructor(uint _biddingTime, address payable _beneficiary) public {
         beneficiary = _beneficiary;
         auctionStart = now;
         biddingTime = _biddingTime;
