@@ -23,6 +23,7 @@ contract SupplyChainStorageOwnable {
   /**
    * @dev The Ownable constructor sets the original `owner` of the contract to the sender
    * account.
+   * @notice modifies owner
    */
   constructor() public {
     owner = msg.sender;
@@ -39,6 +40,7 @@ contract SupplyChainStorageOwnable {
   /**
    * @dev Allows the current owner to transfer control of the contract to a newOwner.
    * @param newOwner The address to transfer ownership to.
+   * @notice modifies owner
    */
   function transferOwnership(address newOwner) public onlyOwner {
     require(newOwner != address(0));
@@ -48,9 +50,14 @@ contract SupplyChainStorageOwnable {
 
   /**
    * @dev Allows the current owner to relinquish control of the contract.
+   * @notice modifies owner
    */
   function renounceOwnership() public onlyOwner {
     emit OwnershipRenounced(owner);
     owner = address(0);
+  }
+
+  function getOwner() public view returns (address) {
+      return owner;
   }
 }

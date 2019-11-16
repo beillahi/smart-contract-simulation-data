@@ -1,0 +1,5 @@
+{
+    "description": "Ownable awesome-cryptokitties simulates OZ Ownable protected",
+    "source": "Ownable/Ownable-awesome-cryptokitties/Ownable.sol",
+    "target": "Ownable/Ownable-openzeppelin/Ownable.spec.protected.sol"
+}

@@ -1,0 +1,5 @@
+{
+    "description": "Ownable 0xcert simulates OZ Ownable",
+    "source": "Ownable/Ownable-0xcert/ownable.sol",
+    "target": "Ownable/Ownable-openzeppelin/Ownable.spec.sol"
+}

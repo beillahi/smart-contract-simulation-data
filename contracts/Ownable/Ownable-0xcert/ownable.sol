@@ -35,10 +35,8 @@ contract Ownable_impl {
 
   /**
    * @dev The constructor sets the original `owner` of the contract to the sender account.
+   * @notice modifies owner
    */
-
- /**       @notice modifies owner
-  */
   constructor()
     public
   {
@@ -58,10 +56,8 @@ contract Ownable_impl {
   /**
    * @dev Allows the current owner to transfer control of the contract to a newOwner.
    * @param _newOwner The address to transfer ownership to.
+   * @notice modifies owner
    */
-
-    /**       @notice modifies owner
-  */
   function transferOwnership(
     address _newOwner
   )
