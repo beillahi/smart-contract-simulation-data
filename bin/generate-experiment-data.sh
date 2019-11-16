@@ -7,8 +7,10 @@ CONFIGS="$ROOT/configs"
 CONTRACTS="$ROOT/contracts"
 IGNORED_KEYS="description"
 COMMAND="sc-simulation"
-TIMESTAMP=$(date +"%Y:%m:%d:%H:%M:%S")
-OUTPUT="$(pwd)/output:${TIMESTAMP}"
+TIMESTAMP=$(date +"%Y.%m.%d.%H.%M")
+TITLE=$(date +"%B %d, %Y %H:%M")
+TAG=$TIMESTAMP
+OUTPUT="output.${TIMESTAMP}"
 DRYRUN=
 
 mkdir -p $OUTPUT
@@ -66,3 +68,10 @@ echo Compressing the results into $OUTPUT.zip
 echo ---
 zip -r "$OUTPUT.zip" "$OUTPUT"
 echo ---
+
+if [[ $(command -v hub) ]]
+then
+    hub release create -m "$TITLE" -a "$OUTPUT.zip" "$TAG"
+else
+    echo Skipping release because hub not installed
+fi

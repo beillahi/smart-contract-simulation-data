@@ -3,4 +3,4 @@ SimulationCheck-*.sol
 *.bodiless.sol
 *.annotated.sol
 /.sc-simulation.ignore
-/output:*
+/output.*
