@@ -7,5 +7,5 @@
     "balances": 100000,
     "payments": 2,
     "num-examples": 370,
-    "unsigned-integers": "{0,3}"
+    "unsigned-integers": "0 3"
 }
