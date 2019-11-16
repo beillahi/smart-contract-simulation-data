@@ -15,7 +15,9 @@ contract Escrow_spec {
     }
 
 
-
+    /**
+    *	@notice modifies _primary
+   */
    constructor() public {
         _primary = msg.sender;
     }

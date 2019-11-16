@@ -28,6 +28,9 @@ contract Escrow {
 
     address public owner;
 
+  /**
+    *	@notice modifies owner
+  */
   constructor() public {
       owner = msg.sender;
   }
