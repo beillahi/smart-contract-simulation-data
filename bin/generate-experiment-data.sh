@@ -11,14 +11,13 @@ TIMESTAMP=$(date +"%Y.%m.%d.%H.%M")
 TITLE=$(date +"%B %d, %Y %H:%M %Z")
 TAG=$TIMESTAMP
 OUTPUT="output.${TIMESTAMP}"
-DRYRUN=
 
 mkdir -p $OUTPUT
 
 echo Generating experimental data to $OUTPUT
 echo ---
 
-for file in $(find $CONFIGS -name "*.json")
+for file in $(find $CONFIGS -name "*.json" | sort)
 do
     name=$(basename $file .json)
     output="$OUTPUT/$name"
@@ -56,7 +55,7 @@ do
     done
 
     # just generate files but don’t actually do much
-    if [[ -n $DRYRUN ]]
+    if [[ -n ${DRYRUN-} ]]
     then
         command="$command --no-examples --no-synthesize --no-verify"
     fi
@@ -75,7 +74,7 @@ echo ---
 zip -r "$OUTPUT.zip" "$OUTPUT"
 echo ---
 
-if [[ -n "$DRYRUN" ]]
+if [[ -n "${DRYRUN-}" ]]
 then
     echo Skipping release because dryrun
 
