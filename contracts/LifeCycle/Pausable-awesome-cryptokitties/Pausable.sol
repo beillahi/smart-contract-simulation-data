@@ -1,9 +1,6 @@
 pragma solidity ^0.5.0;
 
 
-import "./original/Ownable.sol";
-
-
 /**
  * @title Pausable
  * @dev Base contract which allows children to implement an emergency stop mechanism.
@@ -20,6 +17,9 @@ contract Pausable_impl  { //is Ownable_impl {
 
   address public owner;
 
+  /**
+        @notice modifies owner
+  */
   constructor() public {
     owner = msg.sender;
   }

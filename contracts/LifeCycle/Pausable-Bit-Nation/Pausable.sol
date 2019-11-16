@@ -1,9 +1,6 @@
 pragma solidity ^0.5.0;
 
 
-import "./original/Ownable.sol";
-
-
 // Link to contract source code 
 // https://github.com/Bit-Nation/PAT-TSE-Old/blob/master/contracts/installed_contracts/zeppelin/contracts/lifecycle/Pausable.sol
 
@@ -25,6 +22,9 @@ contract Pausable_impl { //} Ownable_impl {
 
   address public owner;
 
+   /**
+        @notice modifies owner
+  */
   constructor() public {
     owner = msg.sender;
   }

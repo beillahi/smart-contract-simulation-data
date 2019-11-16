@@ -1,0 +1,5 @@
+{
+    "description": "Bit-Nation pausable contract verification test",
+    "source": "LifeCycle/Pausable-Bit-Nation/Pausable.sol",
+    "target": "LifeCycle/Pausable-openzeppelin/Pausable.spec.sol"
+}
