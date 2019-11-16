@@ -1,0 +1,6 @@
+{
+    "description": "0x676abde481967851b0c28e81bde8561e756d75e8 Whitelisted simulates OZ Whitelisted role",
+    "source": "Roles/0x676abde481967851b0c28e81bde8561e756d75e8/Whitelisted.sol",
+    "target": "Roles/Whitelisted-openzeppelin/Whitelisted.spec.sol",
+    "states": 15
+}

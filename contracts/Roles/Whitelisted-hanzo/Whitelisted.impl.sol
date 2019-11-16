@@ -15,6 +15,16 @@ contract Whitelist  {
 
     address internal owner;
 
+    event WhitelistAdded(address indexed addr);
+    event WhitelistRemoved(address indexed addr);
+
+    modifier onlyOwner() {
+        if (msg.sender != owner) {
+          revert();
+        }
+        _;
+      }
+
 
     /** @notice modifies owner
     */
@@ -25,23 +35,26 @@ contract Whitelist  {
     /** @notice modifies length
         @notice modifies whitelist[account]
     */
-    function addWhitelisted(address account) public {
-        require(msg.sender == owner);
+    function addWhitelisted(address account) public onlyOwner {
+        require(account != address(0));
         whitelist[account] = true;
         length++;
+        emit WhitelistAdded(account);
     }
 
     /** @notice modifies length
         @notice modifies whitelist[account]
     */
-    function removeWhitelisted(address account) public {
-        require(msg.sender == owner);
+    function removeWhitelisted(address account) public onlyOwner {
+        require(account != address(0));
         whitelist[account] = false;
         length++;
+        emit WhitelistRemoved(account);
     }
 
 
     function isWhitelisted(address account) public view returns (bool) {
+        require(account != address(0));
         if (length == 0) {
             return false;
         }
