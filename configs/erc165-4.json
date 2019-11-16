@@ -1,0 +1,5 @@
+{
+    "description": "ERC165 0x366cf49c6bc3986b20ecf4fd7c05f0c617332e8c simulates OZ ERC165-spec",
+    "source": "Interface/0x366cf49c6bc3986b20ecf4fd7c05f0c617332e8c/ERC165.sol",
+    "target": "Interface/ERC165-openzeppelin/ERC165.spec.sol"
+}

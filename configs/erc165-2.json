@@ -1,0 +1,5 @@
+{
+    "description": "ERC165 simulates OZ ERC165-spec",
+    "source": "Interface/ERC165-button/ERC165.sol",
+    "target": "Interface/ERC165-openzeppelin/ERC165.spec.sol"
+}
