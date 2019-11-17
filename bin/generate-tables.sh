@@ -40,6 +40,8 @@ function latexTable() {
     local span="1-$numColumns"
     local col=0
 
+    echo "%% NOTE: this table is automatically generated; do not edit manually"
+
     echo -n "\begin{tabular}{"
     for field in "${columns[@]}"
     do
@@ -146,13 +148,13 @@ function examplesTable() {
     local columns=(l l l l l l)
     local header=(
         name
-        "traces (count)"
+        "traces"
         # "trace length (avg)"
         # "trace length (max)"
-        "states (count)"
-        "transactions (count)"
-        "positivie examples (count)"
-        "negative examples (count)"
+        "states"
+        "txs."
+        "pos. ex."
+        "neg. ex."
     )
     local rows=()
 
@@ -177,13 +179,13 @@ function synthesisTable() {
     local columns=(l l l l l l l l)
     local header=(
         name
-        "positivie examples (count)"
-        "negative examples (count)"
-        "fields (count)"
-        "seed features (count)"
-        "synthesized features (count)"
-        "queries (count)"
-        "transactions (count)"
+        "pos. ex."
+        "neg. ex."
+        "fields"
+        "seeds"
+        "new fts."
+        "queries"
+        "txs."
     )
     local rows=()
 
@@ -208,8 +210,8 @@ function verifyTable() {
     local columns=(l l l l)
     local header=(
         name
-        "functions (count)"
-        "lines of code (count)"
+        "functions"
+        "LOC"
         verified
     )
     local rows=()
@@ -259,7 +261,7 @@ function overviewTable() {
     do
         rows+=(
             $example
-            "$(getMetric $example synthesis-data.json .output[])"
+            "\verb|$(getMetric $example synthesis-data.json .output[])|"
             $(getMetric $example verifier-data.json .success)
         )
     done
