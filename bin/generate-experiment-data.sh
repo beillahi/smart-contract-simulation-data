@@ -2,7 +2,8 @@
 
 set -euo pipefail
 
-ROOT="$(cd $(dirname $(dirname $BASH_SOURCE[0])) && pwd)"
+BIN="$(dirname $BASH_SOURCE[0])"
+ROOT="$(cd $(dirname $BIN) && pwd)"
 CONFIGS="$ROOT/configs"
 CONTRACTS="$ROOT/contracts"
 IGNORED_KEYS="description"
@@ -11,8 +12,10 @@ TIMESTAMP=$(date +"%Y.%m.%d.%H.%M")
 TITLE=$(date +"%B %d, %Y %H:%M %Z")
 TAG=$TIMESTAMP
 OUTPUT="output.${TIMESTAMP}"
+TABLES="tables.${TIMESTAMP}"
 
 mkdir -p $OUTPUT
+mkdir -p $TABLES
 
 echo Generating experimental data to $OUTPUT
 echo ---
@@ -69,9 +72,11 @@ do
     echo ---
 done
 
+source "$BIN/generate-tables.sh" "$OUTPUT" "$TABLES"
+
 echo Compressing the results into $OUTPUT.zip
 echo ---
-zip -r "$OUTPUT.zip" "$OUTPUT"
+zip -r "$OUTPUT.zip" "$OUTPUT" "$TABLES"
 echo ---
 
 if [[ -n "${DRYRUN-}" ]]

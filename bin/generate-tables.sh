@@ -3,6 +3,7 @@
 set -euo pipefail
 
 output=${1:-output}
+tabledir=${2:-.}
 
 if [[ ! -d "$output" ]]
 then
@@ -266,12 +267,22 @@ function overviewTable() {
     table columns[@] header[@] rows[@]
 }
 
-echo "$(overviewTable)"
-echo ---
-echo "$(timingBreakdownTable)"
-echo ---
-echo "$(examplesTable)"
-echo ---
-echo "$(synthesisTable)"
-echo ---
-echo "$(verifyTable)"
+function generateTables() {
+    local dir="$1"
+    echo "Generating overview table: $dir/overview-table.tex"
+    echo "$(overviewTable)" > "$dir/overview-table.tex"
+
+    echo "Generating timing table: $dir/timing-table.tex"
+    echo "$(timingBreakdownTable)" > "$dir/timing-table.tex"
+
+    echo "Generating examples table: $dir/examples-table.tex"
+    echo "$(examplesTable)" > "$dir/examples-table.tex"
+
+    echo "Generating synthesis table: $dir/synthesis-table.tex"
+    echo "$(synthesisTable)" > "$dir/synthesis-table.tex"
+
+    echo "Generating verify table: $dir/verify-table.tex"
+    echo "$(verifyTable)" > "$dir/verify-table.tex"
+}
+
+generateTables "$tabledir"
