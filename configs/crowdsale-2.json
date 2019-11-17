@@ -1,0 +1,5 @@
+{
+    "description": "CrowdSale-basic-attention-token simulates OZ CrowdSale",
+    "source": "CrowdSale/CrowdSale-basic-attention-token/CrowdSale.impl.sol",
+    "target": "CrowdSale/CrowdSale-openzeppelin/CrowdSale.spec.sol"
+}

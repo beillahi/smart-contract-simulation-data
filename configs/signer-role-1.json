@@ -1,0 +1,5 @@
+{
+    "description": "SignerRole-FCS simulate OZ SignerRole",
+    "source": "Roles/SignerRole-FCS/SignerRole-impl.sol",
+    "target": "Roles/SignerRole-openzeppelin/SignerRole-spec.sol"
+}
