@@ -1,0 +1,8 @@
+{
+    "description": "Sirin Lab Standard Token doesn't simulate OZ ERC20",
+    "source": "Token/ERC20-SirinLab/StandardToken.sol",
+    "target": "Token/ERC20-openzeppelin/ERC20.spec.sol",
+    "states" : 45,
+    "num-accounts" : 0,
+    "unsigned-integers": "1 2"
+}

@@ -1,6 +1,6 @@
 {
-    "description": "ERC20-moloch simulates OZ ERC20",
-    "source": "Token/ERC20-molochventures/ERC20.impl.sol",
+    "description": "SONM-IO StandardToken simulates OZ ERC20",
+    "source": "Token/ERC20-SONM-IO/StandardToken.sol",
     "target": "Token/ERC20-openzeppelin/ERC20.spec.sol",
     "states": 17,
     "num-accounts": 0,

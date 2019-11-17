@@ -33,6 +33,11 @@ contract Token {
 
     uint internal _totalSupply;
 
+    event Transfer(address indexed from, address indexed to, uint256 value);
+    event Approval(address indexed owner, address indexed spender, uint value);
+
+
+
 
 
     /**
@@ -150,7 +155,7 @@ contract Token {
 
         _balances[from] = _balances[from] - value;
         _balances[to] = _balances[to] + value;
-        //emit Transfer(from, to, value);
+        emit Transfer(from, to, value);
     }
 
     /**
@@ -167,7 +172,7 @@ contract Token {
 
         _totalSupply = _totalSupply + val;
         _balances[to] = _balances[to] + val;
-        //emit Transfer(address(0), account, value);
+        emit Transfer(address(0), to, val);
     }
 
     /**
@@ -184,7 +189,7 @@ contract Token {
 
         _totalSupply = _totalSupply - val;
         _balances[from] = _balances[from] - val;
-        //emit Transfer(account, address(0), value);
+        emit Transfer(from, address(0), val);
     }
 
     /**
@@ -199,7 +204,7 @@ contract Token {
         require(owner != address(0));
 
         _allowed[owner][spender] = value;
-        //emit Approval(owner, spender, value);
+        emit Approval(owner, spender, value);
     }
 
     /**
