@@ -3,64 +3,16 @@
 set -euo pipefail
 
 output=$1
-columns="lllll"
-span="1-5"
-header="name & examples (count) & examples (ms) & synthesis (ms) & verify (ms) & transactions (count) & queries (count) & expression & verified"
-rows=""
 
-for exampleDir in $output/*
-do
-    exampleName=$(basename $exampleDir)
+function table() {
+    local columns="$1"
+    local header="$2"
+    local rows="$3"
 
-    simulationMetrics="$exampleDir/simulation-metrics.json"
-    examplesData="$exampleDir/examples-data.json"
-    evaluatorQueries="$exampleDir/evaluator-queries.jsonl"
-    synthesisData="$exampleDir/synthesis-data.json"
-    verifierData="$exampleDir/verifier-data.json"
+    local numColumns=$(expr $(echo "$columns" | wc -c) - 1)
+    local span="1-$numColumns"
 
-    numExamples=$(jq '.examples.value' $simulationMetrics)
-    examplesTime=$(jq '.examplesTime.value' $simulationMetrics)
-    synthesisTime=$(jq '.synthesisTime.value' $simulationMetrics)
-    verifyTime=$(jq '.verifyTime.value' $simulationMetrics)
-
-    if [[ -f $examplesData ]]
-    then
-        numTransactions=$(jq '.transactionHistory | length' $examplesData)
-    else
-        numTransactions=?
-    fi
-
-    if [[ -f $evaluatorQueries ]]
-    then
-        numQueries=$(jq -s 'length' $evaluatorQueries)
-    else
-        numQueries=?
-    fi
-
-    if [[ -f $synthesisData ]]
-    then
-        synthesisOutput=$(jq '.output[]' $synthesisData)
-    else
-        synthesisData=?
-    fi
-
-    if [[ -f $verifierData ]]
-    then
-        verifySuccess=$(jq '.success' $verifierData)
-    else
-        verifySuccess=?
-    fi
-
-    row="$exampleName & $numExamples & $examplesTime & $synthesisTime & $verifyTime & $numTransactions & $numQueries & $synthesisOutput & $verifySuccess \\\\"
-
-    if [[ -n "$rows" ]]
-    then
-        rows="$rows"$'\n    '
-    fi
-    rows="$rows$row"
-done
-
-cat << EOF
+    cat << EOF
 \begin{tabular}{$columns}
     \toprule
     $header \\\\
@@ -69,3 +21,82 @@ cat << EOF
     \bottomrule
 \end{tabular}
 EOF
+}
+
+function getMetric() {
+    local example="$1"
+    local json="$2"
+    local expression="$3"
+    local flags="${4:-}"
+    local unknown=-
+
+    local file="$output/$example/$json"
+    local result
+
+    if [[ -f "$file" ]]
+    then
+        result=$(jq -r $flags "$expression // \"$unknown\"" $file)
+    else
+        result=$unknown
+    fi
+
+    echo "$result"
+}
+
+function getExamples() {
+    echo "$(ls $output | sort)"
+}
+
+function bigTable() {
+    local columns="lllllll"
+    local header="name & examples (count) & examples (ms) & synthesis (ms) & verify (ms) & transactions (count) & queries (count)"
+    local rows=""
+
+    for example in $(getExamples)
+    do
+        numExamples=$(getMetric $example simulation-metrics.json .examples.value)
+        examplesTime=$(getMetric $example simulation-metrics.json .examplesTime.value)
+        synthesisTime=$(getMetric $example simulation-metrics.json .synthesisTime.value)
+        verifyTime=$(getMetric $example simulation-metrics.json .verifyTime.value)
+        numTransactions=$(getMetric $example example-data.json ".transactionHistory | length")
+        numQueries=$(getMetric $example evaluator-queries.jsonl length -s)
+
+        row="$example & $numExamples & $examplesTime & $synthesisTime & $verifyTime & $numTransactions & $numQueries \\\\"
+
+        if [[ -n "$rows" ]]
+        then
+            rows="$rows"$'\n    '
+        fi
+        rows="$rows$row"
+    done
+
+    table "$columns" "$header" "$rows"
+}
+
+function anotherTable() {
+    local columns="lll"
+    local header="name & expression & verified"
+    local rows=""
+
+    for example in $(getExamples)
+    do
+        synthesisOutput=$(getMetric $example synthesis-data.json .output[])
+        verifySuccess=$(getMetric $example verifier-data.json .success)
+
+        row="$example & $synthesisOutput & $verifySuccess \\\\"
+
+        if [[ -n "$rows" ]]
+        then
+            rows="$rows"$'\n    '
+        fi
+        rows="$rows$row"
+    done
+
+    table "$columns" "$header" "$rows"
+}
+
+echo ---
+bigTable
+echo ---
+anotherTable
+echo ---
