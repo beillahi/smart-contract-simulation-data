@@ -4,3 +4,4 @@ SimulationCheck-*.sol
 *.annotated.sol
 /.sc-simulation.ignore
 /output.*
+/tables.*
