@@ -5,22 +5,114 @@ set -euo pipefail
 output=$1
 
 function table() {
-    local columns="$1"
-    local header="$2"
-    local rows="$3"
+    declare -a columns=("${!1}")
+    declare -a headers=("${!2}")
+    declare -a rows=("${!3}")
 
-    local numColumns=$(expr $(echo "$columns" | wc -c) - 1)
+    if [[ ${#headers[@]} != ${#columns[@]} ]]
+    then
+        echo "Got ${#headers[@]} headers, expected ${#columns[@]}"
+        exit -1
+    fi
+
+    if [[ $((${#rows[@]} % ${#columns[@]})) != 0 ]]
+    then
+        echo "Got ${#rows[@]} rows, expected multiple of ${#columns[@]}"
+        exit -1
+    fi
+
+    latexTable columns[@] header[@] rows[@]
+}
+
+function latexTable() {
+    declare -a columns=("${!1}")
+    declare -a headers=("${!2}")
+    declare -a rows=("${!3}")
+
+    local numColumns=${#columns[@]}
     local span="1-$numColumns"
+    local col=0
 
-    cat << EOF
-\begin{tabular}{$columns}
-    \toprule
-    $header \\\\
-    \cmidrule(lr){$span}
-    $rows
-    \bottomrule
-\end{tabular}
-EOF
+    echo -n "\begin{tabular}{"
+    for field in "${columns[@]}"
+    do
+        echo -n "$field"
+    done
+    echo "}"
+
+    echo "\toprule"
+
+    for field in "${headers[@]}"
+    do
+        echo -n "$field"
+        ((col++))
+
+        if [[ $(( $col % $numColumns )) == 0 ]]
+        then
+            echo " \\\\"
+        else
+            echo -n " & "
+        fi
+    done
+
+    echo "\cmidrule(lr){$span}"
+
+    for field in "${rows[@]}"
+    do
+        echo -n "$field"
+        ((col++))
+
+        if [[ $(( $col % $numColumns )) == 0 ]]
+        then
+            echo " \\\\"
+        else
+            echo -n " & "
+        fi
+    done
+
+    echo "\bottomrule"
+    echo "\end{tabular}"
+}
+
+function textTable() {
+    declare -a columns=("${!1}")
+    declare -a headers=("${!2}")
+    declare -a rows=("${!3}")
+
+    local numColumns=${#columns[@]}
+    local col=0
+
+    for field in "${headers[@]}"
+    do
+        echo -n "$field"
+        ((col++))
+
+        if [[ $(( $col % $numColumns )) == 0 ]]
+        then
+            echo
+        else
+            echo -n ", "
+        fi
+    done
+
+    echo ----------------------------------------------------------------
+
+    for field in "${rows[@]}"
+    do
+        echo -n "$field"
+        ((col++))
+
+        if [[ $(( $col % $numColumns )) == 0 ]]
+        then
+            echo
+        else
+            echo -n ", "
+        fi
+    done
+}
+
+function getExamples() {
+    echo "$(ls $output | sort)"
 }
 
 function getMetric() {
@@ -43,60 +135,117 @@ function getMetric() {
     echo "$result"
 }
 
-function getExamples() {
-    echo "$(ls $output | sort)"
-}
-
-function bigTable() {
-    local columns="lllllll"
-    local header="name & examples (count) & examples (ms) & synthesis (ms) & verify (ms) & transactions (count) & queries (count)"
-    local rows=""
-
-    for example in $(getExamples)
-    do
-        numExamples=$(getMetric $example simulation-metrics.json .examples.value)
-        examplesTime=$(getMetric $example simulation-metrics.json .examplesTime.value)
-        synthesisTime=$(getMetric $example simulation-metrics.json .synthesisTime.value)
-        verifyTime=$(getMetric $example simulation-metrics.json .verifyTime.value)
-        numTransactions=$(getMetric $example example-data.json ".transactionHistory | length")
-        numQueries=$(getMetric $example evaluator-queries.jsonl length -s)
-
-        row="$example & $numExamples & $examplesTime & $synthesisTime & $verifyTime & $numTransactions & $numQueries \\\\"
-
-        if [[ -n "$rows" ]]
-        then
-            rows="$rows"$'\n    '
-        fi
-        rows="$rows$row"
-    done
-
-    table "$columns" "$header" "$rows"
-}
-
-function anotherTable() {
-    local columns="lll"
-    local header="name & expression & verified"
-    local rows=""
+function examplesTable() {
+    local columns=(l l l l)
+    local header=(
+        name
+        "positivie examples (count)"
+        "negative examples (count)"
+        "transactions (count)"
+    )
+    local rows=()
 
     for example in $(getExamples)
     do
-        synthesisOutput=$(getMetric $example synthesis-data.json .output[])
-        verifySuccess=$(getMetric $example verifier-data.json .success)
-
-        row="$example & $synthesisOutput & $verifySuccess \\\\"
-
-        if [[ -n "$rows" ]]
-        then
-            rows="$rows"$'\n    '
-        fi
-        rows="$rows$row"
+        rows+=(
+            $example
+            $(getMetric $example examples-data.json ".examples.positive | length")
+            $(getMetric $example examples-data.json ".examples.negative | length")
+            $(getMetric $example examples-data.json ".transactionHistory | length")
+        )
     done
 
-    table "$columns" "$header" "$rows"
+    table columns[@] header[@] rows[@]
 }
 
+function synthesisTable() {
+    local columns=(l l l l)
+    local header=(
+        name
+        "positivie examples (count)"
+        "negative examples (count)"
+        "queries (count)"
+    )
+    local rows=()
+
+    for example in $(getExamples)
+    do
+        rows+=(
+            $example
+            $(getMetric $example examples-data.json ".examples.positive | length")
+            $(getMetric $example examples-data.json ".examples.negative | length")
+            $(getMetric $example evaluator-queries.jsonl length -s)
+        )
+    done
+
+    table columns[@] header[@] rows[@]
+}
+
+function verifyTable() {
+    local columns=(l l)
+    local header=(
+        name
+        verified
+    )
+    local rows=()
+
+    for example in $(getExamples)
+    do
+        rows+=(
+            $example
+            $(getMetric $example verifier-data.json .success)
+        )
+    done
+
+    table columns[@] header[@] rows[@]
+}
+
+function timingBreakdownTable() {
+    local columns=(l l l l)
+    local header=(
+        name
+        "examples (ms)"
+        "synthesis (ms)"
+        "verify (ms)"
+    )
+    local rows=()
+
+    for example in $(getExamples)
+    do
+        rows+=(
+            $example
+            $(getMetric $example simulation-metrics.json .examplesTime.value)
+            $(getMetric $example simulation-metrics.json .synthesisTime.value)
+            $(getMetric $example simulation-metrics.json .verifyTime.value)
+        )
+    done
+
+    table columns[@] header[@] rows[@]
+}
+
+function overviewTable() {
+    local columns=(l l l)
+    local header=(name expression verified)
+    local rows=()
+
+    for example in $(getExamples)
+    do
+        rows+=(
+            $example
+            "$(getMetric $example synthesis-data.json .output[])"
+            $(getMetric $example verifier-data.json .success)
+        )
+    done
+
+    table columns[@] header[@] rows[@]
+}
+
+echo "$(overviewTable)"
 echo ---
-bigTable
+echo "$(timingBreakdownTable)"
 echo ---
-anotherTable
+echo "$(examplesTable)"
 echo ---
+echo "$(synthesisTable)"
+echo ---
+echo "$(verifyTable)"
