@@ -1,5 +1,5 @@
 {
-    "description": "ethlink pausable contract verification test",
+    "description": "ethlink pausable simulates OZ Pausable",
     "source": "LifeCycle/Pausable-ethlink/Pausable.impl.sol",
     "target": "LifeCycle/Pausable-openzeppelin/Pausable.spec.sol"
 }

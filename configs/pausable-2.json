@@ -1,5 +1,5 @@
 {
-    "description": "awesome-cryptokitties pausable contract verification test",
+    "description": "awesome-cryptokitties pausable simulates OZ Pausable",
     "source": "LifeCycle/Pausable-awesome-cryptokitties/Pausable.sol",
     "target": "LifeCycle/Pausable-openzeppelin/Pausable.spec.sol"
 }

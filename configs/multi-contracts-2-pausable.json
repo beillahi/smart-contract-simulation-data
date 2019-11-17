@@ -1,0 +1,5 @@
+{
+    "description": "Paxosglobal Multi-Contracts pausable simulates OZ Pausable",
+    "source": "Multi-Contracts/Paxosglobal/PAXImplementation.sol",
+    "target": "LifeCycle/Pausable-openzeppelin/Pausable.spec.sol"
+}

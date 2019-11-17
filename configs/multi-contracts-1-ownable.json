@@ -1,0 +1,5 @@
+{
+    "description": "Multi-Contracts QurozToken Ownable simulates OZ Ownable",
+    "source": "Multi-Contracts/QurozToken/QurozToken.sol",
+    "target": "Ownable/Ownable-openzeppelin/Ownable.spec.sol"
+}

@@ -1,0 +1,5 @@
+{
+    "description": "Multi-Contracts QurozToken ERC20 simulates OZ ERC20",
+    "source": "Multi-Contracts/QurozToken/QurozToken.sol",
+    "target": "Token/ERC20-openzeppelin/ERC20.spec.sol"
+}

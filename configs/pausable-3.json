@@ -1,5 +1,5 @@
 {
-    "description": "Bit-Nation pausable contract verification test",
+    "description": "Bit-Nation pausable contract simulates OZ Pausable",
     "source": "LifeCycle/Pausable-Bit-Nation/Pausable.sol",
     "target": "LifeCycle/Pausable-openzeppelin/Pausable.spec.sol"
 }

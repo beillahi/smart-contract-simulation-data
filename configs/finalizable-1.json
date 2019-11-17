@@ -1,0 +1,5 @@
+{
+    "description": "Aionnetwork Finalizable simulates 0x00c4b398500645eb5da00a1a379a88b11683ba01 Finalizable",
+    "source": "LifeCycle/Finalizable-aionnetwork/Finalizable.sol",
+    "target": "LifeCycle/Finalizable-0x00c4b398500645eb5da00a1a379a88b11683ba01/Finalizable-spec.sol"
+}

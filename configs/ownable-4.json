@@ -1,5 +1,5 @@
 {
-    "description": "Ownable coffee-supplychain-ethereum simulates modified OZ Ownable",
+    "description": "Ownable coffee-supplychain-ethereum simulates OZ Ownable",
     "source": "Ownable/Ownable-coffee-supplychain-ethereum/Ownable.sol",
-    "target": "Ownable/Ownable-openzeppelin-modified/Ownable.spec.sol"
+    "target": "Ownable/Ownable-openzeppelin/Ownable.spec.sol"
 }

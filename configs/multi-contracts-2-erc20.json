@@ -1,0 +1,5 @@
+{
+    "description": "Paxosglobal Multi-Contracts ERC20 simulates OZ ERC20",
+    "source": "Multi-Contracts/Paxosglobal/PAXImplementation.sol",
+    "target": "Token/ERC20-openzeppelin/ERC20.spec.sol"
+}

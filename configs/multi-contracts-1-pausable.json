@@ -1,0 +1,5 @@
+{
+    "description": "Multi-Contracts QurozToken Pausable simulates OZ Pausable",
+    "source": "Multi-Contracts/QurozToken/QurozToken.sol",
+    "target": "LifeCycle/Pausable-openzeppelin/Pausable.spec.sol"
+}

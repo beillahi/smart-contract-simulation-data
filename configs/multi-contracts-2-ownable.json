@@ -1,0 +1,5 @@
+{
+    "description": "Paxosglobal Multi-Contracts Ownable simulates OZ Ownable",
+    "source": "Multi-Contracts/Paxosglobal/PAXImplementation.sol",
+    "target": "Ownable/Ownable-openzeppelin/Ownable.spec.sol"
+}
