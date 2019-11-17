@@ -2,22 +2,56 @@
 
 set -euo pipefail
 
-output=output.2019.11.16.14.58
+output=$1
 columns="lllll"
 span="1-5"
-header="name & examples (count) & examples (ms) & synthesis (ms) & verify (ms)"
+header="name & examples (count) & examples (ms) & synthesis (ms) & verify (ms) & transactions (count) & queries (count) & expression & verified"
 rows=""
 
 for exampleDir in $output/*
 do
     exampleName=$(basename $exampleDir)
-    metrics="$exampleDir/simulation-metrics.json"
-    numExamples=$(jq '.examples.value' $metrics)
-    examplesTime=$(jq '.examplesTime.value' $metrics)
-    synthesisTime=$(jq '.synthesisTime.value' $metrics)
-    verifyTime=$(jq '.verifyTime.value' $metrics)
 
-    row="$exampleName & $numExamples & $examplesTime & $synthesisTime & $verifyTime \\\\"
+    simulationMetrics="$exampleDir/simulation-metrics.json"
+    examplesData="$exampleDir/examples-data.json"
+    evaluatorQueries="$exampleDir/evaluator-queries.jsonl"
+    synthesisData="$exampleDir/synthesis-data.json"
+    verifierData="$exampleDir/verifier-data.json"
+
+    numExamples=$(jq '.examples.value' $simulationMetrics)
+    examplesTime=$(jq '.examplesTime.value' $simulationMetrics)
+    synthesisTime=$(jq '.synthesisTime.value' $simulationMetrics)
+    verifyTime=$(jq '.verifyTime.value' $simulationMetrics)
+
+    if [[ -f $examplesData ]]
+    then
+        numTransactions=$(jq '.transactionHistory | length' $examplesData)
+    else
+        numTransactions=?
+    fi
+
+    if [[ -f $evaluatorQueries ]]
+    then
+        numQueries=$(jq -s 'length' $evaluatorQueries)
+    else
+        numQueries=?
+    fi
+
+    if [[ -f $synthesisData ]]
+    then
+        synthesisOutput=$(jq '.output[]' $synthesisData)
+    else
+        synthesisData=?
+    fi
+
+    if [[ -f $verifierData ]]
+    then
+        verifySuccess=$(jq '.success' $verifierData)
+    else
+        verifySuccess=?
+    fi
+
+    row="$exampleName & $numExamples & $examplesTime & $synthesisTime & $verifyTime & $numTransactions & $numQueries & $synthesisOutput & $verifySuccess \\\\"
 
     if [[ -n "$rows" ]]
     then
