@@ -2,7 +2,13 @@
 
 set -euo pipefail
 
-output=$1
+output=${1:-output}
+
+if [[ ! -d "$output" ]]
+then
+    echo "No such output directory: $output"
+    exit -1
+fi
 
 function table() {
     declare -a columns=("${!1}")
@@ -136,11 +142,46 @@ function getMetric() {
 }
 
 function examplesTable() {
-    local columns=(l l l l)
+    local columns=(l l l l l l)
+    local header=(
+        name
+        "traces (count)"
+        # "trace length (avg)"
+        # "trace length (max)"
+        "states (count)"
+        "transactions (count)"
+        "positivie examples (count)"
+        "negative examples (count)"
+    )
+    local rows=()
+
+    for example in $(getExamples)
+    do
+        rows+=(
+            $example
+            $(getMetric $example examples-data.json ".states | length")
+            $(getMetric $example examples-data.json ".traces | length")
+            # $(getMetric $example examples-data.json "[.traces | length] as \$vs | (\$vs|add) / (\$vs|length)")
+            # $(getMetric $example examples-data.json ".traces | max_by(length)")
+            $(getMetric $example examples-data.json ".transactionHistory | length")
+            $(getMetric $example examples-data.json ".examples.positive | length")
+            $(getMetric $example examples-data.json ".examples.negative | length")
+        )
+    done
+
+    table columns[@] header[@] rows[@]
+}
+
+function synthesisTable() {
+    local columns=(l l l l l l l l)
     local header=(
         name
         "positivie examples (count)"
         "negative examples (count)"
+        "fields (count)"
+        "seed features (count)"
+        "synthesized features (count)"
+        "queries (count)"
         "transactions (count)"
     )
     local rows=()
@@ -149,32 +190,13 @@ function examplesTable() {
     do
         rows+=(
             $example
-            $(getMetric $example examples-data.json ".examples.positive | length")
-            $(getMetric $example examples-data.json ".examples.negative | length")
-            $(getMetric $example examples-data.json ".transactionHistory | length")
-        )
-    done
-
-    table columns[@] header[@] rows[@]
-}
-
-function synthesisTable() {
-    local columns=(l l l l)
-    local header=(
-        name
-        "positivie examples (count)"
-        "negative examples (count)"
-        "queries (count)"
-    )
-    local rows=()
-
-    for example in $(getExamples)
-    do
-        rows+=(
-            $example
-            $(getMetric $example examples-data.json ".examples.positive | length")
-            $(getMetric $example examples-data.json ".examples.negative | length")
+            $(getMetric $example synthesis-input-data.json ".examples.positive | length")
+            $(getMetric $example synthesis-input-data.json ".examples.negative | length")
+            $(getMetric $example synthesis-input-data.json ".expressions | length")
+            $(getMetric $example synthesis-input-data.json ".features | length")
+            $(getMetric $example synthesis-data.json ".features | length")
             $(getMetric $example evaluator-queries.jsonl length -s)
+            $(getMetric $example evaluator-data.jsonl length -s)
         )
     done
 
@@ -182,9 +204,11 @@ function synthesisTable() {
 }
 
 function verifyTable() {
-    local columns=(l l)
+    local columns=(l l l l)
     local header=(
         name
+        "functions (count)"
+        "lines of code (count)"
         verified
     )
     local rows=()
@@ -193,6 +217,8 @@ function verifyTable() {
     do
         rows+=(
             $example
+            $(getMetric $example verifier-data.json .functions)
+            $(getMetric $example verifier-data.json .linesOfCode)
             $(getMetric $example verifier-data.json .success)
         )
     done
