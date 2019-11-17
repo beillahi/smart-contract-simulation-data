@@ -1,0 +1,6 @@
+{
+    "description": "ERC721 0x0dfe79ab44f8f194f0475d9e78e6ef80935e173f simulates OZ ERC721",
+    "source": "Token/0x0dfe79ab44f8f194f0475d9e78e6ef80935e173f/ERC721.sol",
+    "target": "Token/ERC721-openzeppelin/ERC721.spec.sol",
+    "states": 37
+}
