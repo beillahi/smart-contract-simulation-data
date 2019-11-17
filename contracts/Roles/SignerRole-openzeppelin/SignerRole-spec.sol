@@ -8,7 +8,7 @@ contract SignerRole_spec {
     event SignerAdded(address indexed account);
     event SignerRemoved(address indexed account);
 
-    Roles.Role private _signers;
+    Roles.Role _signers;
 
     constructor () internal {
         _addSigner(msg.sender);
