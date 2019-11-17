@@ -1,0 +1,6 @@
+{
+    "description": "ERC721 ayidouble simulates OZ ERC721",
+    "source": "Token/ERC721-ayidouble/ERC721.impl.sol",
+    "target": "Token/ERC721-openzeppelin/ERC721.spec.sol",
+    "states": 37
+}
