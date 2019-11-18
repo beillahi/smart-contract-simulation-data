@@ -1,0 +1,5 @@
+{
+    "description": "0x95fc2b5ff1f40c0df89183eceb8db8692b900a88 SignerRole simulate OZ SignerRole",
+    "source": "Roles/0x95fc2b5ff1f40c0df89183eceb8db8692b900a88/SignerRole.sol",
+    "target": "Roles/SignerRole-openzeppelin/SignerRole-spec.sol"
+}

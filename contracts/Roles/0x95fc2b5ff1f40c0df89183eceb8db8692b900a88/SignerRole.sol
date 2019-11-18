@@ -1,11 +1,8 @@
 pragma solidity ^0.5.0;
 
-import "./Roles.sol";
+import "./original/Roles.sol";
 
-// Link to source contract
-// https://github.com/fcscolorstone/FCS/blob/master/fcs_token/access/roles/SignerRole.sol
-
-contract SignerRole_impl {
+contract SignerRole {
     using Roles for Roles.Role;
 
     event SignerAdded(address indexed account);
@@ -13,7 +10,7 @@ contract SignerRole_impl {
 
     Roles.Role _signers;
 
-   constructor () internal {
+    constructor () internal {
         _addSigner(msg.sender);
     }
 
@@ -46,7 +43,7 @@ contract SignerRole_impl {
         emit SignerAdded(account);
     }
 
-    /** @notice modifies _signers.bearer[account]
+     /** @notice modifies _signers.bearer[account]
     */
     function _removeSigner(address account) internal {
         _signers.remove(account);
