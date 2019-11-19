@@ -1,6 +1,6 @@
 pragma solidity ^0.5.0;
 
-import "./Roles.sol";
+import "./original/Roles.sol";
 
 // Link to source contract
 // https://github.com/fcscolorstone/FCS/blob/master/fcs_token/access/roles/SignerRole.sol
