@@ -1,4 +1,4 @@
-pragma solidity >=0.5.0;
+pragma solidity ^0.5.0;
 
 // OpenZeppelin crowdsale
 // Link to contract source code:

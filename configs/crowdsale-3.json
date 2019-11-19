@@ -1,6 +1,6 @@
 {
-    "description": "0x8227d745273c29bd3179611df37e84e6cf068bee CrowdSale simulates OZ CrowdSale",
-    "source": "CrowdSale/0x8227d745273c29bd3179611df37e84e6cf068bee/CrowdSale.sol",
+    "description": "0xf01eab46ade80e599209681a5aaa13260ae8735c CrowdSale simulates OZ CrowdSale",
+    "source": "CrowdSale/0xf01eab46ade80e599209681a5aaa13260ae8735c/CrowdSale.sol",
     "target": "CrowdSale/CrowdSale-openzeppelin/CrowdSale.spec.sol",
     "states": 17,
     "unsigned-integers": "1 4",
