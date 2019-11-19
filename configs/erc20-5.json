@@ -1,5 +1,6 @@
 {
-    "description": "ERC20-moloch simulates OZ ERC20",
-    "source": "Token/ERC20-molochventures/ERC20.impl.sol",
-    "target": "Token/ERC20-openzeppelin/ERC20.spec.sol"
+    "description": " 0xb83b51b60e60a8728691d61a53862a1f8df7bcca ERC20 does not simulate OZ ERC20 with initial supply",
+    "source": "Token/0xb83b51b60e60a8728691d61a53862a1f8df7bcca/ERC20.sol",
+    "target": "Token/ERC20-openzeppelin/ERC20.spec.constructor.initial.supply.sol",
+    "states": 173
 }

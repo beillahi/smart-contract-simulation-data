@@ -1,5 +1,8 @@
 {
-    "description": "ERC20-moloch-constructor simulates OZ ERC20-constructor",
-    "source": "Token/ERC20-molochventures/ERC20.impl.constructor.sol",
-    "target": "Token/ERC20-openzeppelin/ERC20.spec.constructor.sol"
+    "description": "ERC20-moloch with initialized total supply simulates OZ ERC20 with initialized total supply",
+    "source": "Token/ERC20-molochventures/ERC20.impl.original.sol",
+    "target": "Token/ERC20-openzeppelin/ERC20.spec.constructor.sol",
+    "states": 23,
+    "num-accounts": 0,
+    "unsigned-integers": "2"
 }

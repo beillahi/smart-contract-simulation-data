@@ -37,9 +37,6 @@ contract Token {
     event Approval(address indexed owner, address indexed spender, uint value);
 
 
-
-
-
     /**
      * @dev Total number of tokens in existence
      */

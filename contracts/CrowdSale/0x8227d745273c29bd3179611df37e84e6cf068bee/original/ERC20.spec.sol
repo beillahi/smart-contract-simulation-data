@@ -1,4 +1,4 @@
-pragma solidity >=0.5.0;
+pragma solidity ^0.5.0;
 
 
 /**
@@ -32,10 +32,6 @@ contract ERC20_spec {
 
     mapping(address=>uint) internal balances ;
     mapping (address => mapping (address => uint)) internal allowances ;
-
-    mapping(address=>bool) internal  minters ;  // specific for Mintable-ERC20
-    mapping(address=>bool) internal  burners ;  // specific for Burnable-ERC20
-
 
     /** @notice postcondition _balance == balances[account]
     */
@@ -137,13 +133,11 @@ contract ERC20_spec {
     }
 
 
-
-   /**  @notice precondition to != address(0)
-	    @notice precondition minters[msg.sender]
+  /**  @notice precondition to != address(0)
         @notice precondition balances[to] + val >= balances[to]
         @notice postcondition balances[to] == __verifier_old_uint(balances[to]) + val
-        @notice modifies balances[to] */
-
+        @notice modifies balances[to]
+    */
     function mint(address to, uint val) public {
         require(to != address(0));
 	    balances[to] = balances[to] + val;
@@ -153,16 +147,14 @@ contract ERC20_spec {
 
 
    /**  @notice precondition from != address(0)
-	    @notice precondition burners[msg.sender]
         @notice precondition balances[from] >= val
         @notice postcondition balances[from] == __verifier_old_uint(balances[from]) - val
-        @notice modifies balances[from] */
-
+        @notice modifies balances[from] 
+    */
     function burn(address from, uint val) public {
         require(from != address(0));
         require(balances[from] >= val);
 	    balances[from] = balances[from] - val;
         emit Transfer(from, address(0), val);
     }
-
 }

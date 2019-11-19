@@ -35,6 +35,9 @@ contract Token {
 
     uint internal _totalSupply;
 
+    event Transfer(address indexed from, address indexed to, uint256 value);
+    event Approval(address indexed owner, address indexed spender, uint value);
+
 
     constructor(uint supply) public {
         mint(msg.sender, supply);
@@ -106,7 +109,7 @@ contract Token {
         @notice modifies _allowed[from]
      */
     function transferFrom(address from, address to, uint value) public {
-         require(_allowed[from][msg.sender] - value >= 0);
+         require(_allowed[from][msg.sender] >= value);
         _transfer(from, to, value);
         _approve(from, msg.sender, _allowed[from][msg.sender] - value);
     }
@@ -138,7 +141,7 @@ contract Token {
        @notice modifies _allowed[msg.sender]
      */
     function decreaseAllowance(address spender, uint subtractedValue) public {
-        require(_allowed[msg.sender][spender] - subtractedValue >= 0);
+        require(_allowed[msg.sender][spender]  >= subtractedValue);
         _approve(msg.sender, spender, _allowed[msg.sender][spender] - subtractedValue);
     }
 
@@ -156,7 +159,7 @@ contract Token {
 
         _balances[from] = _balances[from] - value;
         _balances[to] = _balances[to] + value;
-        //emit Transfer(from, to, value);
+        emit Transfer(from, to, value);
     }
 
     /**
@@ -164,33 +167,33 @@ contract Token {
      * an account. This encapsulates the modification of balances such that the
      * proper events are emitted.
      * @param to The account that will receive the created tokens.
-     * @param val The amount that will be created.
+     * @param value The amount that will be created.
      @notice modifies _balances[to]
      @notice modifies _totalSupply
      */
-    function mint(address to, uint val) internal {
+    function mint(address to, uint value) internal {
         require(to != address(0));
 
-        _totalSupply = _totalSupply + val;
-        _balances[to] = _balances[to] + val;
-        //emit Transfer(address(0), account, value);
+        _totalSupply = _totalSupply + value;
+        _balances[to] = _balances[to] + value;
+        emit Transfer(address(0), to, value);
     }
 
     /**
      * @dev Internal function that burns an amount of the token of a given
      * account.
      * @param from The account whose tokens will be burnt.
-     * @param val The amount that will be burnt.
+     * @param value The amount that will be burnt.
       @notice modifies _balances[from]
       @notice modifies _totalSupply
      */
-    function burn(address from, uint val) internal {
+    function burn(address from, uint value) internal {
         require(from != address(0));
-        require(_balances[from] >= val);
+        require(_balances[from] >= value);
 
-        _totalSupply = _totalSupply - val;
-        _balances[from] = _balances[from] - val;
-        //emit Transfer(account, address(0), value);
+        _totalSupply = _totalSupply - value;
+        _balances[from] = _balances[from] - value;
+        emit Transfer(from, address(0), value);
     }
 
     /**
@@ -205,7 +208,7 @@ contract Token {
         require(owner != address(0));
 
         _allowed[owner][spender] = value;
-        //emit Approval(owner, spender, value);
+        emit Approval(owner, spender, value);
     }
 
     /**

@@ -33,6 +33,12 @@ contract ERC20_spec {
     mapping(address=>uint) internal balances ;
     mapping (address => mapping (address => uint)) internal allowances ;
 
+  
+    constructor() public {
+        
+    }
+
+
     /** @notice postcondition _balance == balances[account]
     */
    function balance(address account) public view returns (uint _balance) {
@@ -133,6 +139,7 @@ contract ERC20_spec {
     }
 
 
+
   /**  @notice precondition to != address(0)
         @notice precondition balances[to] + val >= balances[to]
         @notice postcondition balances[to] == __verifier_old_uint(balances[to]) + val
@@ -157,4 +164,5 @@ contract ERC20_spec {
 	    balances[from] = balances[from] - val;
         emit Transfer(from, address(0), val);
     }
+
 }
