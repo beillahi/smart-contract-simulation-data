@@ -5,3 +5,6 @@ SimulationCheck-*.sol
 /.sc-simulation.ignore
 /output.*
 /tables.*
+/log.*
+/dist
+/node_modules

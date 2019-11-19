@@ -5,10 +5,14 @@ set -euo pipefail
 output=${1:-output}
 tabledir=${2:-.}
 
+BIN="$(dirname "$BASH_SOURCE[0]")"
+ROOT="$(cd "$(dirname "$BIN")" && pwd)"
+CONFIGS="$ROOT/configs"
+
 if [[ ! -d "$output" ]]
 then
     echo "No such output directory: $output"
-    exit -1
+    exit 42
 fi
 
 function table() {
@@ -124,6 +128,17 @@ function getExamples() {
     echo "$(ls $output | sort)"
 }
 
+function getTriagedExamples() {
+    local triage=()
+    examples=$(find "$CONFIGS" -name '*.json' | xargs basename -s '.json' | sort)
+    groups=$(echo "$examples" | sed 's/-.*//' | uniq)
+    for group in $groups
+    do
+        members=$(echo $examples | grep $group | xargs)
+        triage+=("$members")
+    done
+}
+
 function getMetric() {
     local example="$1"
     local json="$2"
@@ -229,7 +244,7 @@ function verifyTable() {
     table columns[@] header[@] rows[@]
 }
 
-function timingBreakdownTable() {
+function timingTable() {
     local columns=(l l l l)
     local header=(
         name
@@ -238,6 +253,15 @@ function timingBreakdownTable() {
         "verify (ms)"
     )
     local rows=()
+
+    for group in $(getTriagedExamples)
+    do
+        echo "group: $group"
+        for member in $group
+        do
+            echo "member: $member"
+        done
+    done
 
     for example in $(getExamples)
     do
@@ -271,20 +295,15 @@ function overviewTable() {
 
 function generateTables() {
     local dir="$1"
-    echo "Generating overview table: $dir/overview-table.tex"
-    echo "$(overviewTable)" > "$dir/overview-table.tex"
 
-    echo "Generating timing table: $dir/timing-table.tex"
-    echo "$(timingBreakdownTable)" > "$dir/timing-table.tex"
+    TABLES="overview timing examples synthesis verify"
+    tables=$(echo "$TABLES" | xargs -n 1 | grep -e "${INCLUDE:-}" | xargs)
 
-    echo "Generating examples table: $dir/examples-table.tex"
-    echo "$(examplesTable)" > "$dir/examples-table.tex"
-
-    echo "Generating synthesis table: $dir/synthesis-table.tex"
-    echo "$(synthesisTable)" > "$dir/synthesis-table.tex"
-
-    echo "Generating verify table: $dir/verify-table.tex"
-    echo "$(verifyTable)" > "$dir/verify-table.tex"
+    for table in $tables
+    do
+        echo "Generating $table table: $dir/$table-table.tex"
+        echo "$("$table"Table)" > "$dir/$table-table.tex"
+    done
 }
 
 generateTables "$tabledir"
