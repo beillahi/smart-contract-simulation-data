@@ -1,5 +1,11 @@
 {
     "description": "CrowdSale-SirinLabs simulates OZ CrowdSale",
     "source": "CrowdSale/CrowdSale-SirinLabs/CrowdSale.impl.sol",
-    "target": "CrowdSale/CrowdSale-openzeppelin/CrowdSale.spec.sol"
+    "target": "CrowdSale/CrowdSale-openzeppelin/CrowdSale.spec.sol",
+    "states": 17,
+    "unsigned-integers": "1 4",
+    "num-accounts": 0,
+    "payments": 2,
+    "num-senders": 1,
+    "num-examples": 330
 }

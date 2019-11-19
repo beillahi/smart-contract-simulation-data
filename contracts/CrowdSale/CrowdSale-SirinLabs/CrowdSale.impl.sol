@@ -49,27 +49,39 @@ contract Crowdsale {
     event TokenPurchase(address indexed purchaser, address indexed beneficiary, uint256 value, uint256 amount);
 
     
-    //  constructor (address payable _wallet, address _token, uint256 _startTime, uint256 _endTime, uint256 _rate)
-    constructor (address payable _wallet, address _token, uint256 _startTime, uint256 _endTime) public {
-        require(_startTime >= now);
-        require(_endTime >= _startTime);
-        //require(_rate > 0);
+    /**
+        * @notice modifies startTime
+        * @notice modifies endTime
+        * @notice modifies rate
+        * @notice modifies wallet
+        * @notice modifies token
+    */
+    constructor (uint256 _rate, address payable _wallet, address _token, uint256 _startTime, uint256 _endTime) public {
+        //require(_startTime >= now);
+        //require(_endTime >= _startTime);
+        require(_rate > 0);
         require(_wallet != address(0));
        // require(_token != SirinSmartToken(address(0)));
 
         startTime = _startTime;
         endTime = _endTime;
-        rate = 6400;
+        rate = _rate;
         wallet = _wallet;
         token = ERC20_spec(_token);
     }
 
-   /**  // fallback function can be used to buy tokens
+    // fallback function can be used to buy tokens
+    /**
     function() external payable {
         buyTokens(msg.sender);
     } */
 
     // low level token purchase function
+    /**
+      * @notice modifies weiRaised
+      * @notice modifies address(this).balance
+      * @notice modifies wallet.balance
+    */
     function buyTokens(address beneficiary) public payable {
         require(beneficiary != address(0));
         require(validPurchase());
@@ -82,7 +94,7 @@ contract Crowdsale {
         // update state
         weiRaised = weiRaised.add(weiAmount);
 
-        token.mint(beneficiary, tokens);
+        //token.mint(beneficiary, tokens);
         emit TokenPurchase(msg.sender, beneficiary, weiAmount, tokens);
 
         forwardFunds();
@@ -90,6 +102,10 @@ contract Crowdsale {
 
     // send ether to the fund collection wallet
     // override to create custom fund forwarding mechanisms
+    /**
+     * @notice modifies wallet.balance
+     * @notice modifies address(this).balance
+    */
     function forwardFunds() public payable {
         wallet.transfer(msg.value);
     }
@@ -112,12 +128,23 @@ contract Crowdsale {
         return rate;
     }
 
+    function getweiRaised() public view returns (uint256 val) {
+        return weiRaised;
+    }
+
+    function getwallet() public view returns (address payable val) {
+        return wallet;
+    }
 
        /**
      * @return the crowdsale closing time.
      */
     function closingTime() public view returns (uint256) {
         return endTime;
+    }
+
+    function openingTime() public view returns (uint256) {
+        return startTime;
     }
 
 

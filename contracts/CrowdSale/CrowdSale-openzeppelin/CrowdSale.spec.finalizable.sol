@@ -29,6 +29,8 @@ contract Crowdsale_specB {
     // Amount of wei raised
     uint256 private _weiRaised;
 
+    bool private _finalized;
+
     uint256 private _openingTime;
     uint256 private _closingTime;
 
@@ -37,6 +39,7 @@ contract Crowdsale_specB {
         * @notice precondition wallet != address(0)
         * @notice precondition rate != 0
         * @notice precondition openingTime >= now && closingTime > openingTime
+        * @notice precondition _finalized
         * @notice precondition address(token) != address(0)
         * @notice postcondition _openingTime == openingTime
         * @notice postcondition _closingTime == closingTime
@@ -62,6 +65,25 @@ contract Crowdsale_specB {
         _rate = rate;
         _wallet = wallet;
         _token = ERC20_spec(token);
+    }
+
+
+    /**
+     * @notice modifies _finalized
+    */
+    function finalize() public {
+        require(!_finalized, "FinalizableCrowdsale: already finalized");
+
+        _finalized = true;
+
+    }
+
+    /**
+     * @return true if the crowdsale is finalized, false otherwise.
+     * @notice postcondition _finalized == val
+    */
+    function finalized() public view returns (bool val) {
+        return _finalized;
     }
 
     /**
@@ -102,7 +124,7 @@ contract Crowdsale_specB {
      * @return the address where funds are collected.
      * @notice postcondition _wallet == val
      */
-    function getwallet() public view returns (address payable val) {
+    function wallet() public view returns (address payable val) {
         return _wallet;
     }
 
@@ -118,7 +140,7 @@ contract Crowdsale_specB {
      * @return the amount of wei raised.
      * @notice postcondition _weiRaised == val
      */
-    function getweiRaised() public view returns (uint256 val) {
+    function weiRaised() public view returns (uint256 val) {
         return _weiRaised;
     }
 
@@ -126,13 +148,12 @@ contract Crowdsale_specB {
         * @notice precondition msg.sender != address(0)
         * @notice precondition msg.value != 0
         * @notice precondition now >= _openingTime && now <= _closingTime
-        * @notice precondition address(this) != _wallet
+        * @notice precondition _finalized
         * @notice precondition msg.sender != address(this)
-        * @notice postcondition address(this).balance == __verifier_old_uint(address(this).balance)
+        * @notice postcondition address(this).balance == __verifier_old_uint(address(this).balance) + msg.value
         * @notice postcondition _weiRaised == __verifier_old_uint(_weiRaised) + msg.value
         * @notice modifies _weiRaised
         * @notice modifies address(this).balance
-        * @notice modifies _wallet.balance
     */
     function createTokens() external payable  {
         buyTokens(msg.sender);
@@ -147,15 +168,15 @@ contract Crowdsale_specB {
         * @notice precondition beneficiary != address(0)
         * @notice precondition msg.value != 0
         * @notice precondition now >= _openingTime && now <= _closingTime
+        * @notice precondition _finalized
         * @notice precondition beneficiary != address(this)
-        * @notice precondition address(this) != _wallet
-        * @notice postcondition address(this).balance == __verifier_old_uint(address(this).balance)
+        * @notice postcondition address(this).balance == __verifier_old_uint(address(this).balance) + msg.value
         * @notice postcondition _weiRaised == __verifier_old_uint(_weiRaised) + msg.value
-        * @notice modifies _weiRaised
-        * @notice modifies address(this).balance
-        * @notice modifies _wallet.balance
+        * @notice modifies _weiRaised 
+        * @notice modifies address(this).balance 
     */
     function buyTokens(address beneficiary) public  payable {
+        require(!_finalized, "FinalizableCrowdsale: already finalized");
         require(isOpen(), "TimedCrowdsale: not open");
         uint256 weiAmount = msg.value;
         _preValidatePurchase(beneficiary, weiAmount);
@@ -262,10 +283,7 @@ contract Crowdsale_specB {
      * @dev Determines how ETH is stored/forwarded on purchases.
      */
     /**
-        * @notice precondition address(this) != _wallet
-        * @notice postcondition address(this).balance == __verifier_old_uint(address(this).balance)
-        * @notice modifies _wallet.balance
-        * @notice modifies address(this).balance
+        * @notice postcondition address(this).balance == __verifier_old_uint(address(this).balance) + msg.value
     */
     function _forwardFunds() public payable {
         _wallet.transfer(msg.value);

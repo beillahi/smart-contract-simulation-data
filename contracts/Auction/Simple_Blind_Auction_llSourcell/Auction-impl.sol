@@ -1,5 +1,8 @@
 pragma solidity ^0.5.0;
 
+// Source link: https://github.com/stormeth/simpleauction/blob/master/contracts/SimpleAuction.sol
+// Sourc link: https://github.com/llSourcell/simple_auction
+
 /**
 
   @notice simulation  SimpleAuction_impl$beneficiary == SimpleAuction_spec$beneficiary
