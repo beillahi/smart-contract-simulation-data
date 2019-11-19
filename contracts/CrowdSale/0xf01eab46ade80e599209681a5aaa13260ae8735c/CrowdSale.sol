@@ -67,7 +67,7 @@ contract Crowdsale {
    */
   function buyTokens(address beneficiary) public payable {
     require(beneficiary != address(0));
-    require(validPurchase());
+    require(validPurchase() && msg.value != 0);
 
     uint256 weiAmount = msg.value;
 
@@ -106,9 +106,7 @@ contract Crowdsale {
 
   // @return true if the transaction can buy tokens
   function validPurchase() internal view returns (bool) {
-    bool withinPeriod = now >= startTime && now <= endTime;
-    bool nonZeroPurchase = msg.value != 0;
-    return withinPeriod && nonZeroPurchase;
+    return now >= startTime && now <= endTime;
   }
 
 
