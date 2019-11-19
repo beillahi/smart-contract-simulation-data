@@ -10,7 +10,7 @@ contract Escrow_spec {
      * @dev Reverts if called from any account other than the primary.
      */
     modifier onlyPrimary() {
-        require(msg.sender == _primary, "Secondary: caller is not the primary account");
+        require(msg.sender == _primary);
         _;
     }
 
@@ -35,7 +35,6 @@ contract Escrow_spec {
 	*/
     function deposit(address payee) public onlyPrimary payable {
     	require(payee != address(0));
-		require(msg.value > 0);
 	    deposits[payee] = deposits[payee] + msg.value;
 
     }

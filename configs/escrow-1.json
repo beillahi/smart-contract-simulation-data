@@ -1,7 +1,7 @@
 {
     "description": "Escrow_Stacktical simulates OZ Escrow",
     "source": "Escrow/Escrow-stacktical/Escrow.impl.sol",
-    "target": "Escrow/Escrow-openzeppelin/Escrow.spec.no-owner.sol",
+    "target": "Escrow/Escrow-openzeppelin/Escrow.spec.sol",
     "states": 17,
     "num-accounts": 0,
     "payments": 2

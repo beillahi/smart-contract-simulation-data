@@ -11,6 +11,7 @@ COMMAND="sc-simulation"
 TIMESTAMP=$(date +"%Y.%m.%d.%H.%M")
 TITLE=$(date +"%B %d, %Y %H:%M %Z")
 TAG=$TIMESTAMP
+LIBS="contracts/original"
 OUTPUT="output.${TIMESTAMP}"
 TABLES="tables.${TIMESTAMP}"
 
@@ -24,7 +25,7 @@ for file in $(find $CONFIGS -name "*.json" | sort)
 do
     name=$(basename $file .json)
     output="$OUTPUT/$name"
-    command="$COMMAND --output $output"
+    command="$COMMAND --output $output --libs $LIBS"
 
     echo Processing example: $name
     echo ---
