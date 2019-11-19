@@ -100,7 +100,8 @@ contract Crowdsale {
     * @notice modifies wallet.balance
     * @notice modifies address(this).balance
    */
-  function forwardFunds() public payable {
+  function forwardFunds() internal //** payable */
+  {
     wallet.transfer(msg.value);
   }
 

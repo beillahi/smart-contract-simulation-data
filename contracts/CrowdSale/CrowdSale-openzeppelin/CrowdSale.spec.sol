@@ -134,9 +134,9 @@ contract Crowdsale_specB {
         * @notice modifies address(this).balance
         * @notice modifies _wallet.balance
     */
-    function createTokens() external payable  {
-        buyTokens(msg.sender);
-    }
+    //function createTokens() external payable  {
+    //    buyTokens(msg.sender);
+    //}
 
     /**
      * @dev low level token purchase ***DO NOT OVERRIDE***
@@ -213,9 +213,6 @@ contract Crowdsale_specB {
         * @notice precondition beneficiary != address(0)
         * @notice precondition beneficiary != address(this)
         * @notice precondition tokenAmount != 0
-        * @notice precondition  _token.balances(address(this)) >= tokenAmount
-        * @notice postcondition _token.balances(beneficiary) == __verifier_old_uint(_token.balances(beneficiary)) + tokenAmount
-        * @notice postcondition _token.balances(address(this)) == __verifier_old_uint(_token.balances(address(this))) - tokenAmount
     */
     function _deliverTokens(address beneficiary, uint256 tokenAmount) internal {
         _token.transfer(beneficiary, tokenAmount);
@@ -231,9 +228,6 @@ contract Crowdsale_specB {
         * @notice precondition beneficiary != address(0)
         * @notice precondition tokenAmount != 0
         * @notice precondition beneficiary != address(this)
-        * @notice precondition  _token.balances(address(this)) >= tokenAmount
-        * @notice postcondition _token.balances(beneficiary) == __verifier_old_uint(_token.balances(beneficiary)) + tokenAmount
-        * @notice postcondition _token.balances(address(this)) == __verifier_old_uint(_token.balances(address(this))) - tokenAmount
     */
      function _processPurchase(address beneficiary, uint256 tokenAmount) internal {
         _deliverTokens(beneficiary, tokenAmount);
@@ -263,11 +257,12 @@ contract Crowdsale_specB {
      */
     /**
         * @notice precondition address(this) != _wallet
-        * @notice postcondition address(this).balance == __verifier_old_uint(address(this).balance)
+        * @notice postcondition address(this).balance == __verifier_old_uint(address(this).balance) - msg.value
         * @notice modifies _wallet.balance
         * @notice modifies address(this).balance
     */
-    function _forwardFunds() public payable {
+    function _forwardFunds() internal //** payable */  
+    {
         _wallet.transfer(msg.value);
     }
 
