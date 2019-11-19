@@ -87,11 +87,10 @@ contract QurozToken {
     _burn(_from, _value);
   }
   
-  function approve(address _spender, uint256 _value) public whenNotPaused returns (bool) {
+  function approve(address _spender, uint256 _value) public whenNotPaused {
       //StandardToken.sol, PausableToken.sol
     allowed[msg.sender][_spender] = _value;
     emit Approval(msg.sender, _spender, _value);
-    return true;
   }
 
   function allowance(address _owner, address _spender) public view returns (uint256) { //StandardToken.sol
@@ -114,7 +113,7 @@ contract QurozToken {
     return true;
   }
 
-  function transfer(address _to, uint256 _value) public whenNotPaused returns (bool) {//BasicToken.sol, PausableToken.sol
+  function transfer(address _to, uint256 _value) public whenNotPaused  {//BasicToken.sol, PausableToken.sol
     require(_to != address(0));
     require(_value <= balances[msg.sender]);
     require(locked[msg.sender] != true);                                                             // new
@@ -122,10 +121,9 @@ contract QurozToken {
     balances[msg.sender] = balances[msg.sender].sub(_value);
     balances[_to] = balances[_to].add(_value);
     emit Transfer(msg.sender, _to, _value);
-    return true;
   }
 
-  function transferFrom(address _from, address _to, uint256 _value) public whenNotPaused returns(bool) {  
+  function transferFrom(address _from, address _to, uint256 _value) public whenNotPaused  {  
       //StandardToken.sol, PausableToken.sol
     require(_to != address(0));
     require(_value <= balances[_from]);
@@ -136,7 +134,6 @@ contract QurozToken {
     balances[_to] = balances[_to].add(_value);
     allowed[_from][msg.sender] = allowed[_from][msg.sender].sub(_value);
     emit Transfer(_from, _to, _value);
-    return true;
   }
 //
   /**       @notice modifies owner
@@ -169,14 +166,13 @@ contract QurozToken {
     emit Unpause();
   }
 
-  function mint(address _to, uint256 _amount, string memory _reason) hasMintPermission canMint public returns (bool)  { 
+  function mint(address _to, uint256 _amount, string memory _reason) hasMintPermission canMint public  { 
       //MintableToken.sol, CappedToken.sol
     require(totalSupply_.add(_amount) <= cap);
     totalSupply_ = totalSupply_.add(_amount);
     balances[_to] = balances[_to].add(_amount);
     emit Mint(_to, _amount, _reason);
     emit Transfer(address(0), _to, _amount);
-    return true;
   }
 
   function finishMinting() onlyOwner canMint public returns (bool) { //MintableToken.sol

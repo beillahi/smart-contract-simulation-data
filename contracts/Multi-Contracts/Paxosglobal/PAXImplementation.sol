@@ -177,9 +177,9 @@ contract PAXImplementation {
     * @notice modifies balances[to]
     */
     function transfer(address to, uint val) public whenNotPaused {//returns (bool) {
-        require(to != address(0), "cannot transfer to address zero");
-        require(!frozen[to] && !frozen[msg.sender], "address frozen");
-        require(val <= balances[msg.sender], "insufficient funds");
+        require(to != address(0));
+        require(!frozen[to] && !frozen[msg.sender]);
+        require(val <= balances[msg.sender]);
 
         balances[msg.sender] = balances[msg.sender].sub(val);
         balances[to] = balances[to].add(val);
@@ -214,10 +214,10 @@ contract PAXImplementation {
     whenNotPaused
     //returns (bool)
     {
-        require(to != address(0), "cannot transfer to address zero");
-        require(!frozen[to] && !frozen[from] && !frozen[msg.sender], "address frozen");
-        require(val <= balances[from], "insufficient funds");
-        require(val <= allowed[from][msg.sender], "insufficient allowance");
+        require(to != address(0));
+        require(!frozen[to] && !frozen[from] && !frozen[msg.sender]);
+        require(val <= balances[from]);
+        require(val <= allowed[from][msg.sender]);
 
         balances[from] = balances[from].sub(val);
         balances[to] = balances[to].add(val);
@@ -237,7 +237,7 @@ contract PAXImplementation {
      * @notice modifies allowed[msg.sender][to]
      */
     function approve(address to, uint val) public whenNotPaused {//returns (bool) {
-        require(!frozen[to] && !frozen[msg.sender], "address frozen");
+        require(!frozen[to] && !frozen[msg.sender]);
         allowed[msg.sender][to] = val;
         emit Approval(msg.sender, to, val);
         //return true;
