@@ -96,8 +96,9 @@ contract SimpleAuction {
     /// The value will only be refunded if the
     /// auction is not won.
     /**
-      @notice modifies pendingReturns[highestBidder]
+      @notice modifies pendingReturns[__verifier_old_address(highestBidder)]
       @notice modifies highestBidder
+      @notice modifies address(this).balance
       @notice modifies highestBid
    */
     function bid() public payable {
@@ -160,6 +161,11 @@ contract SimpleAuction {
     
     /// End the auction and send the highest bid
     /// to the beneficiary.
+    /**
+      @notice modifies ended
+      @notice modifies address(this).balance
+      @notice modifies beneficiary.balance
+   */
     function auctionEnd() public {
         // It is a good guideline to structure functions that interact
         // with other contracts (i.e. they call functions or send Ether)

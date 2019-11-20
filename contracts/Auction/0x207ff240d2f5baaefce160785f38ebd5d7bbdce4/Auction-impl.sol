@@ -63,6 +63,11 @@ contract SimpleAuction {
     /// Create a simple auction with `_biddingTime`
     /// seconds bidding time on behalf of the
     /// beneficiary address `_beneficiary`.
+    /**
+      @notice modifies beneficiary
+      @notice modifies auctionStart
+      @notice modifies biddingTime
+   */
    constructor(uint _biddingTime, address payable _beneficiary) public {
         beneficiary = _beneficiary;
         auctionStart = now;
@@ -73,6 +78,12 @@ contract SimpleAuction {
     /// together with this transaction.
     /// The value will only be refunded if the
     /// auction is not won.
+    /**
+      @notice modifies pendingReturns[__verifier_old_address(highestBidder)]
+      @notice modifies highestBidder
+      @notice modifies address(this).balance
+      @notice modifies highestBid
+   */
     function bid() public payable {
         // No arguments are necessary, all
         // information is already part of
@@ -129,6 +140,11 @@ contract SimpleAuction {
 
     /// End the auction and send the highest bid
     /// to the beneficiary.
+    /**
+      @notice modifies ended
+      @notice modifies address(this).balance
+      @notice modifies beneficiary.balance
+   */
     function auctionEnd() public {
         // It is a good guideline to structure functions that interact
         // with other contracts (i.e. they call functions or send Ether)
