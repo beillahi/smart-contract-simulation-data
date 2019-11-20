@@ -2,6 +2,60 @@ import fs from "fs-extra";
 import path from "path";
 import { IGroup } from "./examples";
 
+type IEvaluatorData = object[];
+
+type IEvaluatorQueryData = object[];
+
+interface ISynthesisInputData {
+    examples: {
+        positive: object[];
+        negative: object[];
+    };
+    expressions: object[];
+    features: object[];
+}
+
+interface IExamplesData {
+    traces: object[];
+    states: object[];
+    transactionHistory: object[];
+    examples: {
+        positive: object[];
+        negative: object[];
+    };
+}
+
+interface ISynthesisData {
+    features: object[];
+    output: string[];
+}
+
+interface IVerifierData {
+    success: boolean;
+    functions: number;
+    linesOfCode: number;
+}
+
+interface ISimulationMetrics {
+    examplesTime: IMetric;
+    synthesisTime: IMetric;
+    verifyTime: IMetric;
+}
+
+interface IMetric {
+    value: number;
+}
+
+interface IDataTypes {
+    metrics: ISimulationMetrics;
+    examples: IExamplesData;
+    synthesis: ISynthesisData;
+    verifier: IVerifierData;
+    evaluator: IEvaluatorData;
+    evaluatorQueries: IEvaluatorQueryData;
+    synthesisInput: ISynthesisInputData;
+}
+
 const dataSources = {
     evaluator: "evaluator-data.jsonl",
     evaluatorQueries: "evaluator-queries.jsonl",
@@ -12,33 +66,27 @@ const dataSources = {
     verifier: "verifier-data.json",
 };
 
-export async function getExampleData<T>(
-        dataPath: string, example: string, source: keyof typeof dataSources): Promise<T | undefined> {
+export async function getExampleData<T extends keyof IDataTypes>(
+        dataPath: string, example: string, source: T): Promise<IDataTypes[T] | undefined> {
 
     const examplePath = path.join(dataPath, example, dataSources[source]);
     try {
         if (path.extname(examplePath) === ".json") {
-            const data = await fs.readJSON(examplePath) as T;
+            const data = await fs.readJSON(examplePath) as IDataTypes[T];
             return data;
 
         } else if (path.extname(examplePath) === ".jsonl") {
             const buffer = await fs.readFile(examplePath);
             const lines = buffer.toString().split("\n");
-
-            const data: any = [];
-            for (const line of lines) {
-                if (line.length > 0) {
-                    data.push(JSON.parse(line));
-                }
-            }
+            const data = lines
+                .map((line) => line.length > 0 ? JSON.parse(line) : undefined)
+                .filter((d) => d !== undefined) as IDataTypes[T];
             return data;
         }
 
     } catch (e) {
-        ;
+        return undefined;
     }
-
-    return undefined;
 }
 
 export interface IData {
@@ -47,35 +95,35 @@ export interface IData {
 }
 
 interface IDataForExample {
-    from(source: keyof typeof dataSources): IDataFromSource;
+    from<T extends keyof IDataTypes>(source: T): IDataFromSource<T>;
 }
 
-interface IDataFromSource {
-    get(f: (_: any) => any): any;
+interface IDataFromSource<T extends keyof IDataTypes> {
+    get<U>(f: (_: IDataTypes[T]) => U): Promise<U | undefined>;
 }
 
-interface IDataForGroup {
-    from(source: keyof typeof dataSources): IGroupDataFromSource;
+interface IDataForGroup{
+    from<T extends keyof IDataTypes>(source: T): IGroupDataFromSource<T>;
 }
 
-interface IGroupDataFromSource {
-    get(f: (_: any) => any): IGroupDataFromSourceResults;
+interface IGroupDataFromSource<T extends keyof IDataTypes> {
+    get<U>(f: (_: IDataTypes[T]) => U): IGroupDataFromSourceResults<U>;
 }
 
-interface IGroupDataFromSourceResults {
+interface IGroupDataFromSourceResults<T> {
     keys(): Promise<string[]>;
-    values(): Promise<any[]>;
-    entries(): Promise<Array<[string,any]>>;
+    values(): Promise<T[]>;
+    entries(): Promise<Array<[string, T]>>;
 }
 
 export function getData(dataPath: string): IData {
     return {
         forExample(example: string): IDataForExample {
             return {
-                from(source: keyof typeof dataSources): IDataFromSource {
+                from<T extends keyof IDataTypes>(source: T): IDataFromSource<T> {
                     return {
-                        async get(f: (_: any) => any) {
-                            const data = await getExampleData(dataPath, example, source);
+                        async get<U>(f: (_: IDataTypes[T]) => U) {
+                            const data = await getExampleData<T>(dataPath, example, source);
 
                             if (data === undefined) {
                                 return undefined;
@@ -94,12 +142,12 @@ export function getData(dataPath: string): IData {
 
         forGroup(group: IGroup) {
             return {
-                from(source: keyof typeof dataSources) {
+                from<T extends keyof IDataTypes>(source: T) {
                     return {
-                        get(f: (_: any) => any) {
+                        get<U>(f: (_: IDataTypes[T]) => U) {
                             const { members } = group;
-                            const results = Promise.all(members.map<Promise<[string, any]>>(async (example) => {
-                                const data = await getExampleData(dataPath, example, source);
+                            const results = Promise.all(members.map(async (example) => {
+                                const data = await getExampleData<T>(dataPath, example, source);
 
                                 if (data === undefined) {
                                     return [example, undefined];
@@ -113,13 +161,13 @@ export function getData(dataPath: string): IData {
                             }));
                             const result = results.then((rs) => Object.fromEntries(rs));
                             return {
-                                async entries(): Promise<Array<[string, any]>> {
+                                async entries(): Promise<Array<[string, U]>> {
                                     return result.then((r) => Object.entries(r));
                                 },
                                 async keys(): Promise<string[]> {
                                     return result.then((r) => Object.keys(r));
                                 },
-                                async values(): Promise<any[]> {
+                                async values(): Promise<U[]> {
                                     return result.then((r) => Object.values(r));
                                 },
                             };

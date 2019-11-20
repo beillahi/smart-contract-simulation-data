@@ -2,7 +2,7 @@ export type Row<T extends string> = {
     [key in T]: Entry;
 };
 
-export type Entry = string | number | undefined;
+export type Entry = string | number | boolean | undefined;
 
 export type ColumnSpec<T extends string> = Row<T>;
 

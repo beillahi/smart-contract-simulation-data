@@ -1,8 +1,8 @@
-import fs from 'fs-extra';
-import path from 'path';
+import fs from "fs-extra";
+import path from "path";
 import { getData } from "./data";
-import { latexTable, latexDocument } from "./latex";
-import tables from "./tables";
+import { latexDocument, latexTable } from "./latex";
+import tables from "./tables/index";
 
 async function main(...args: string[]) {
     const [ , , dataPath, tablesPath = "." ] = args;

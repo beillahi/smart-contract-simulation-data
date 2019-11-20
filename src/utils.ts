@@ -1,12 +1,16 @@
 import * as mathjs from "mathjs";
 import { Entry } from "./specs";
 
-export function normalize(entry: Entry): Entry {
-    return mapEntry(entry, (n) => mathjs.round(n, 3) as number);
+export function normalize(entry: Entry, n: number = 1): Entry {
+    return mapEntry(entry, (x) => mathjs.round(x, n) as number);
 }
 
-export function mean(entries: Entry[]) {
-    return mapEntries(entries, (ns) => mathjs.mean(ns));
+export function mean(entries: Entry[], n: number = 1) {
+    return mapEntries(entries, (xs) => `${mathjs.round(mathjs.mean(xs), n)}`);
+}
+
+export function dist(entries: Entry[], n: number = 1) {
+    return mapEntries(entries, (xs) => `${mathjs.round(mathjs.mean(xs), n)}±${mathjs.round(mathjs.std(xs), n)}`);
 }
 
 export function msToS(entry: Entry): Entry {
@@ -19,21 +23,16 @@ export function mixed(entries: Entry[]): Entry {
 }
 
 function mapEntry(entry: Entry, f: (_: number) => Entry): Entry {
-    if (entry === undefined) {
-        return undefined;
-    }
+    const num = entryToNumber(entry);
+    return num !== undefined ? f(num) : undefined;
+}
 
-    if (typeof(entry) === "string") {
-        entry = Number(entry);
-    }
-
-    return f(entry);
+function entryToNumber(entry: Entry): number | undefined {
+    const num = parseInt(entry as any);
+    return Number.isFinite(num) ? num : undefined;
 }
 
 function mapEntries(entries: Entry[], f: (_: number[]) => Entry): Entry {
-    const filtered = entries
-        .filter((n) => n !== undefined)
-        .map((n) => typeof(n) === "string" ? Number(n) : n) as number[];
-
+    const filtered = entries.map(entryToNumber).filter((n) => n !== undefined) as number[];
     return filtered.length > 0 ? f(filtered) : undefined;
 }
