@@ -10,7 +10,7 @@ export function mean(entries: Entry[], n: number = 1) {
 }
 
 export function dist(entries: Entry[], n: number = 1) {
-    return mapEntries(entries, (xs) => `${mathjs.round(mathjs.mean(xs), n)}±${mathjs.round(mathjs.std(xs), n)}`);
+    return mapEntries(entries, (xs) => `$${mathjs.round(mathjs.mean(xs), n)}\\pm${mathjs.round(mathjs.std(xs), n)}$`);
 }
 
 export function msToS(entry: Entry): Entry {
