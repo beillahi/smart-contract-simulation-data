@@ -2,5 +2,6 @@
     "description": "Hanzo Whitelisted does not simulate OZ Whitelisted role",
     "source": "Roles/Whitelisted-hanzo/Whitelisted.impl.sol",
     "target": "Roles/Whitelisted-openzeppelin/Whitelisted.spec.sol",
-    "states": 13
+    "states": 13,
+    "num-examples": 170
 }

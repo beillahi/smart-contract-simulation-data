@@ -2,7 +2,8 @@
     "description": "Simple lottery simulation",
     "source": "Games/Lottery-impl/Lottery-impl.sol",
     "target": "Games/Lottery/Lottery-spec.sol",
-    "states": 29,
+    "states": 31,
     "num-accounts": 0,
+    "num-examples": 370,
     "payments": 2
 }
