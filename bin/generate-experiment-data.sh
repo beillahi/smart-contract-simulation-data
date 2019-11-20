@@ -11,7 +11,7 @@ function log() {
     "$@" | tee -a "$LOG"
 }
 
-BIN="$(dirname "$BASH_SOURCE[0]")"
+BIN="$(dirname "${BASH_SOURCE[0]}")"
 ROOT="$(cd "$(dirname "$BIN")" && pwd)"
 CONFIGS="$ROOT/configs"
 CONTRACTS="$ROOT/contracts"
@@ -45,7 +45,7 @@ do
     log echo ---
 
     # consider any fields defined in the given config
-    for key in $(jq -r 'keys[]' $file)
+    for key in $(jq -r 'keys[]' "$file")
     do
         # read the value of the given key
         value=$(jq -r .\""$key"\" "$file")
@@ -53,7 +53,7 @@ do
         # skip null values
         if [[ "$value" == "null" ]]
         then
-            log echo Warning: null value for: $key
+            log echo "Warning: null value for: $key"
             continue
 
         # print out descriptions
@@ -80,7 +80,7 @@ do
     fi
 
     # actually run the command
-    log echo Running command: $command
+    log echo "Running command: $command"
     log echo ---
     mkdir -p "$output"
     $command > >(tee "$output"/stdout.log) 2> >(tee "$output"/stderr.log >&2)
@@ -91,7 +91,7 @@ done
 node "$ROOT/dist/index.js" "$OUTPUT" "$TABLES"
 (cd "$TABLES" && latexmk document.tex)
 
-log echo Compressing the results into $OUTPUT.zip
+log echo "Compressing the results into $OUTPUT.zip"
 log echo ---
 zip -r "$OUTPUT.zip" "$OUTPUT" "$TABLES" "$LOG"
 log echo ---
