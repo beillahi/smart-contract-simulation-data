@@ -16,8 +16,6 @@ interface ISynthesisInputData {
 }
 
 interface IExamplesData {
-    traces: object[];
-    states: object[];
     transactionHistory: object[];
     examples: {
         positive: object[];
@@ -40,6 +38,8 @@ interface ISimulationMetrics {
     examplesTime: IMetric;
     synthesisTime: IMetric;
     verifyTime: IMetric;
+    states: IMetric;
+    traces: IMetric;
 }
 
 interface IMetric {

@@ -10,8 +10,9 @@ export default async function(data: IData): Promise<ITableSpec<keyof typeof colu
     const rows = await perExampleGroup(async (group) => {
         const { name: spec, members: { length: n } } = group;
         const examples = data.forGroup(group).from("examples");
-        const traces = dist(await examples.get((({ traces: { length } }) => length)).values());
-        const states = dist(await examples.get((({ states: { length } }) => length)).values());
+        const metrics = data.forGroup(group).from("metrics");
+        const traces = dist(await metrics.get((({ traces: { value } }) => value)).values());
+        const states = dist(await metrics.get((({ states: { value } }) => value)).values());
         const txs = dist(await examples.get((({ transactionHistory: { length } }) => length)).values());
         const pos = dist(await examples.get((({ examples: { positive: { length } }}) => length)).values());
         const neg = dist(await examples.get((({ examples: { negative: { length } }}) => length)).values());
