@@ -28,7 +28,7 @@ function isMember(group: string) {
 }
 
 function groupOf(example: string) {
-    return example.substring(0, example.indexOf("-"));
+    return example.substring(0, example.lastIndexOf("-"));
 }
 
 async function getExamples() {
