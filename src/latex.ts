@@ -10,6 +10,7 @@ export function latexDocument(tableNames: string[]): string {
 
     for (const name of tableNames) {
         lines.push("\\begin{table}");
+        lines.push(`\\caption{${name} table}`);
         lines.push(`\\input ${name}-table.tex`);
         lines.push("\\end{table}");
     }
