@@ -60,3 +60,11 @@ export function countTerms(expression: string): number | undefined {
     const terms = expression.match(/(?=\((?!and|or).*\))/g);
     return terms === null ? undefined : terms.length;
 }
+
+export function countVerifiedFunctions(lines: string[]): number {
+    return lines.filter((line) => line.match(/^\S+: OK$/)).length;
+}
+
+export function countUnVerifiedFunctions(lines: string[]): number {
+    return lines.filter((line) => line.match(/^\S+: ERROR$/)).length;
+}

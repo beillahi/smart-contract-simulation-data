@@ -30,7 +30,8 @@ interface ISynthesisData {
 
 interface IVerifierData {
     success: boolean;
-    functions: number;
+    output: string[];
+    errors: string[];
     linesOfCode: number;
 }
 

@@ -4,10 +4,11 @@ export function latexDocument(tableNames: string[]): string {
     const lines: string[] = [];
     lines.push("\\documentclass{article}");
     lines.push("\\usepackage{booktabs}");
+    lines.push("\\usepackage[margin=1cm]{geometry}");
     lines.push("\\begin{document}");
 
     for (const name of tableNames) {
-        lines.push("\\begin{table}");
+        lines.push("\\begin{table}[h]");
         lines.push(`\\caption{${name} table}`);
         lines.push(`\\input ${name}-table.tex`);
         lines.push("\\end{table}");

@@ -6,9 +6,9 @@ import timing from "./timing";
 import verify from "./verify";
 
 export default [
-    examples,
     overview,
-    synthesis,
     timing,
+    examples,
+    synthesis,
     verify,
 ];
