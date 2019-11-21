@@ -1,11 +1,11 @@
 import { IData } from "../data";
 import { perExampleGroup } from "../examples";
 import { ITableSpec } from "../specs";
-import { dist } from "../utils";
+import { countTerms, dist } from "../utils";
 
 const name = "synthesis";
 const columns = {
-    spec: "l", n: "l", pos: "l", neg: "l", fields: "l", seeds: "l", fts: "l", queries: "l", txs: "l"
+    spec: "l", n: "l", pos: "l", neg: "l", fields: "l", seeds: "l", terms: "l", queries: "l", txs: "l"
 };
 
 export default async function(data: IData): Promise<ITableSpec<keyof typeof columns>> {
@@ -21,11 +21,11 @@ export default async function(data: IData): Promise<ITableSpec<keyof typeof colu
         const neg = dist(await synthesisInput.get((({ examples: { negative: { length } }}) => length)).values());
         const fields = dist(await synthesisInput.get((({ expressions: { length } }) => length)).values());
         const seeds = dist(await synthesisInput.get((({ features: { length } }) => length)).values());
-        const fts = dist(await synthesis.get((({ features: { length } }) => length)).values());
+        const terms = dist(await synthesis.get((({ output: [ sim ] }) => countTerms(sim))).values());
         const queries = dist(await evaluatorQueries.get((({ length }) => length)).values());
         const txs = dist(await evaluator.get((({ length }) => length)).values());
 
-        return { spec, n, pos, neg, fields, seeds, fts, queries, txs };
+        return { spec, n, pos, neg, fields, seeds, terms, queries, txs };
     });
     return { name, columns, rows };
 }

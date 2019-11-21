@@ -55,3 +55,8 @@ export function skeletonOfExpression(expression: string): string {
         .replace(/&/g, "\\land");
     return `$${skeleton}$`;
 }
+
+export function countTerms(expression: string): number | undefined {
+    const terms = expression.match(/(?=\((?!and|or).*\))/g);
+    return terms === null ? undefined : terms.length;
+}
