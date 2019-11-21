@@ -55,6 +55,13 @@ function latexEntry(entry: Entry) {
 
 export const empty = "-";
 
-export function meanAndStd(mean: number, std: number, count: number) {
-    return `${mean} $\\!\\pm\\!$ ${std}, ${count}`;
+export function meanAndStd(mean: number, std: number, count?: number) {
+    const parts = [`${mean}`];
+    if (std !== 0) {
+        parts.push(`$\\pm$`, `${std}`);
+    }
+    if (count !== undefined) {
+        parts.push(`:`, ` `, `{\\bf ${count}}`);
+    }
+    return parts.join(``);
 }

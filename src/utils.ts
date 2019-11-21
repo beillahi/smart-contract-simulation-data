@@ -16,15 +16,16 @@ export function dist(entries: Entry[], n: number = 1) {
         booleanFn: nonNumericDist,
         defaultValue: Latex.empty,
         entries,
-        numberFn: numericDist,
+        numberFn: (ns) => numericDist(ns, entries.length),
         stringFn: nonNumericDist,
     });
 }
 
-function numericDist(entries: number[], n = 1) {
+function numericDist(entries: number[], expected: number, n = 1) {
     const mean = mathjs.round(mathjs.mean(entries), n) as number;
     const std = mathjs.round(mathjs.std(entries), n) as number;
-    const count = entries.length;
+    const { length } = entries;
+    const count = length === expected ? undefined : length;
     return Latex.meanAndStd(mean, std, count);
 }
 

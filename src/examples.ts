@@ -28,7 +28,7 @@ function isMember(group: string) {
 }
 
 function groupOf(example: string) {
-    return example.substring(0, example.lastIndexOf("-"));
+    return example.substring(0, example.lastIndexOf("-")).replace(/-contracts/, "");
 }
 
 async function getExamples() {
