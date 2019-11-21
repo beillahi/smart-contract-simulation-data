@@ -32,7 +32,7 @@ function nonNumericDist(entries: Array<string | boolean>, n = 1) {
     const index = (i: string | boolean) => i === true ? "\\textsf{T}" : i === false ? "\\textsf{F}" : i;
     const counts = Object.fromEntries(entries.map((e) => [index(e), 0]));
     entries.forEach((e) => counts[index(e)]++);
-    return Object.entries(counts).sort().map(([k, v]) => `${k}:${v}`).join(", ");
+    return Object.entries(counts).sort().map(([k, v]) => `${k}$\\times$${v}`).join(", ");
 }
 
 export function msToS(entry: Entry): number | undefined {
