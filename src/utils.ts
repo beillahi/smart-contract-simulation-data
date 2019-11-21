@@ -1,20 +1,46 @@
 import * as mathjs from "mathjs";
+import * as Latex from "./latex";
 import { Entry } from "./specs";
+import * as E from "./specs";
 
-export function normalize(entry: Entry, n: number = 1): Entry {
-    return mapEntry(entry, (x) => mathjs.round(x, n) as number);
+export function normalize(entry: number, n = 1): number {
+    return mathjs.round(entry, n) as number;
 }
 
-export function mean(entries: Entry[], n: number = 1) {
-    return mapEntries(entries, (xs) => `${mathjs.round(mathjs.mean(xs), n)}`);
+export function mean(entries: number[], n = 1): number {
+    return mathjs.round(mathjs.mean(entries), n) as number;
 }
 
 export function dist(entries: Entry[], n: number = 1) {
-    return mapEntries(entries, (xs) => `$${mathjs.round(mathjs.mean(xs), n)}\\pm${mathjs.round(mathjs.std(xs), n)}$`);
+    return E.applyAry<string>({
+        booleanFn: nonNumericDist,
+        defaultValue: Latex.empty,
+        entries,
+        numberFn: numericDist,
+        stringFn: nonNumericDist,
+    });
 }
 
-export function msToS(entry: Entry): Entry {
-    return mapEntry(entry, (n) => normalize(n / 1000));
+function numericDist(entries: number[], n = 1) {
+    const mean = mathjs.round(mathjs.mean(entries), n) as number;
+    const std = mathjs.round(mathjs.std(entries), n) as number;
+    const count = entries.length;
+    return Latex.meanAndStd(mean, std, count);
+}
+
+function nonNumericDist(entries: Array<string | boolean>, n = 1) {
+    const index = (i: string | boolean) => i === true ? "\\textsf{T}" : i === false ? "\\textsf{F}" : i;
+    const counts = Object.fromEntries(entries.map((e) => [index(e), 0]));
+    entries.forEach((e) => counts[index(e)]++);
+    return Object.entries(counts).sort().map(([k, v]) => `${k}:${v}`).join(", ");
+}
+
+export function msToS(entry: Entry): number | undefined {
+    return E.apply<number | undefined>({
+        entry,
+        defaultValue: undefined,
+        numberFn: (n: number) => n / 1000,
+    });
 }
 
 export function mixed(entries: Entry[]): Entry {
@@ -22,17 +48,10 @@ export function mixed(entries: Entry[]): Entry {
     return entries.every((e) => e === entry) ? entry : undefined;
 }
 
-function mapEntry(entry: Entry, f: (_: number) => Entry): Entry {
-    const num = entryToNumber(entry);
-    return num !== undefined ? f(num) : undefined;
-}
-
-function entryToNumber(entry: Entry): number | undefined {
-    const num = parseInt(entry as any);
-    return Number.isFinite(num) ? num : undefined;
-}
-
-function mapEntries(entries: Entry[], f: (_: number[]) => Entry): Entry {
-    const filtered = entries.map(entryToNumber).filter((n) => n !== undefined) as number[];
-    return filtered.length > 0 ? f(filtered) : undefined;
+export function skeletonOfExpression(expression: string): string {
+    const skeleton = expression
+        .replace(/\band\b/g, "&")
+        .replace(/[\w$]+/g, "")
+        .replace(/&/g, "\\land");
+    return `$${skeleton}$`;
 }

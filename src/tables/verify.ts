@@ -12,7 +12,7 @@ export default async function(data: IData): Promise<ITableSpec<keyof typeof colu
         const verifier = data.forGroup(group).from("verifier");
         const functions = dist(await verifier.get((({ functions: x }) => x)).values());
         const LOC = dist(await verifier.get((({ linesOfCode: x }) => x)).values());
-        const verified = mixed(await verifier.get((({ success: x }) => x)).values());
+        const verified = dist(await verifier.get((({ success: x }) => x)).values());
 
         return { spec, n, functions, LOC, verified };
     });

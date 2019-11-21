@@ -4,6 +4,8 @@ import { getData } from "./data";
 import { latexDocument, latexTable } from "./latex";
 import tables from "./tables/index";
 
+require('source-map-support').install();
+
 async function main(...args: string[]) {
     const [ , , dataPath, tablesPath = "." ] = args;
     const data = getData(dataPath);

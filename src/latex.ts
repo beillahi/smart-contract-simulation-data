@@ -1,7 +1,5 @@
 import { ColumnSpec, ITableSpec, Row, Entry } from "./specs";
 
-require('source-map-support').install();
-
 export function latexDocument(tableNames: string[]): string {
     const lines: string[] = [];
     lines.push("\\documentclass{article}");
@@ -51,5 +49,11 @@ function latexRow(row: Row<any>) {
 }
 
 function latexEntry(entry: Entry) {
-    return entry === undefined ? "-" : entry.toString();
+    return entry === undefined ? empty : entry.toString();
+}
+
+export const empty = "-";
+
+export function meanAndStd(mean: number, std: number, count: number) {
+    return `${mean} $\\!\\pm\\!$ ${std}, ${count}`;
 }
