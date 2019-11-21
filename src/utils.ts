@@ -53,6 +53,7 @@ export function skeletonOfExpression(expression: string): string {
     const skeleton = expression
         .replace(/\band\b/g, "&")
         .replace(/[\w$]+/g, "")
+        .replace(/\(\s*([=+])\s*\)/g, "{(\\!{$1}\\!)}")
         .replace(/&/g, "\\land");
     return `$${skeleton}$`;
 }
@@ -62,10 +63,19 @@ export function countTerms(expression: string): number | undefined {
     return terms === null ? undefined : terms.length;
 }
 
-export function countVerifiedFunctions(lines: string[]): number {
-    return lines.filter((line) => line.match(/^\S+: OK$/)).length;
+export function countVerifiedFunctions(lines: string[]): number | undefined {
+    return validVerifierResults(lines)
+        ? lines.filter((line) => line.match(/^\S+: OK$/)).length
+        : undefined;
 }
 
-export function countUnVerifiedFunctions(lines: string[]): number {
-    return lines.filter((line) => line.match(/^\S+: ERROR$/)).length;
+export function countUnVerifiedFunctions(lines: string[]): number | undefined {
+    return validVerifierResults(lines)
+        ? lines.filter((line) => line.match(/^\S+: (ERROR|SKIPPED)$/)).length
+        : undefined;
+}
+
+export function validVerifierResults(lines: string[]): boolean {
+    return lines.length > 0
+        && lines.filter((line) => line.match(/Error while running compiler, details:/)).length === 0;
 }
