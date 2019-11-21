@@ -1,3 +1,4 @@
+import cp from "child_process";
 import fs from "fs-extra";
 import path from "path";
 import { IGroup } from "./examples";
@@ -67,6 +68,14 @@ const dataSources = {
     verifier: "verifier-data.json",
 };
 
+export async function getExampleLoc(dataPath: string, example: string): Promise<number | undefined> {
+    const examplePath = path.join(dataPath, example);
+    const command = `ls ${examplePath}/*.sol | grep -v -e Context -e Examples -e exemplified | xargs wc -l | tail -n 1 | sed 's/ *//' | cut -d' ' -f 1`;
+    const output = cp.execSync(command).toString();
+    const n = parseInt(output);
+    return Number.isFinite(n) ? n : undefined;
+}
+
 export async function getExampleData<T extends keyof IDataTypes>(
         dataPath: string, example: string, source: T): Promise<IDataTypes[T] | undefined> {
 
@@ -93,6 +102,7 @@ export async function getExampleData<T extends keyof IDataTypes>(
 export interface IData {
     forExample(example: string): IDataForExample;
     forGroup(group: IGroup): IDataForGroup;
+    loc(example: string): Promise<number | undefined>;
 }
 
 interface IDataForExample {
@@ -177,5 +187,8 @@ export function getData(dataPath: string): IData {
                 },
             };
         },
+        loc(example: string) {
+            return getExampleLoc(dataPath, example);
+        }
     };
 }
