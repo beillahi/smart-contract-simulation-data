@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/beillahi/smart-contract-simulation-data.git"
+    "url": "git+https://github.com/anonymous/smart-contract-simulation-data.git"
   },
-  "author": "Michael Emmi <michael.emmi@gmail.com>",
+  "author": "Anonymous",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/beillahi/smart-contract-simulation-data/issues"
+    "url": "https://github.com/anonymous/smart-contract-simulation-data/issues"
   },
-  "homepage": "https://github.com/beillahi/smart-contract-simulation-data#readme",
+  "homepage": "https://github.com/anonymous/smart-contract-simulation-data#readme",
   "devDependencies": {
     "@types/fs-extra": "^8.0.1",
     "@types/mathjs": "^6.0.2",
