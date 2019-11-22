@@ -89,7 +89,7 @@ contract ERC20_spec {
     function approve(address to, uint val) public {
         require(msg.sender != address(0));
         require(to != address(0));
-	    allowances[msg.sender][to] = allowances[msg.sender][to] = val;
+	    allowances[msg.sender][to] = val;
         emit Approval(msg.sender, to, val);
     }
 
