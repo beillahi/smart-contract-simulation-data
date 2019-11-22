@@ -2,7 +2,7 @@
     "description": "Multi-Contracts QurozToken ERC20 doesn't simulate OZ ERC20",
     "source": "Multi-Contracts/QurozToken/QurozToken.sol",
     "target": "Token/ERC20-openzeppelin/ERC20.spec.sol",
-    "states": 107,
-    "unsigned-integers": 2,
+    "states": 170,
+    "unsigned-integers": "1 2",
     "num-accounts": 0
 }
