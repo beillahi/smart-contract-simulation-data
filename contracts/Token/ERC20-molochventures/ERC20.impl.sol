@@ -102,7 +102,7 @@ contract Token {
         @notice modifies _allowed[from]
      */
     function transferFrom(address from, address to, uint value) public {
-         require(_allowed[from][msg.sender] - value >= 0);
+         require(_allowed[from][msg.sender] >= value);
         _transfer(from, to, value);
         _approve(from, msg.sender, _allowed[from][msg.sender] - value);
     }
@@ -134,7 +134,7 @@ contract Token {
        @notice modifies _allowed[msg.sender]
      */
     function decreaseAllowance(address spender, uint subtractedValue) public {
-        require(_allowed[msg.sender][spender] - subtractedValue >= 0);
+        require(_allowed[msg.sender][spender] >= subtractedValue);
         _approve(msg.sender, spender, _allowed[msg.sender][spender] - subtractedValue);
     }
 

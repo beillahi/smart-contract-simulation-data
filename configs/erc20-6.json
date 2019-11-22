@@ -1,6 +1,6 @@
 {
-    "description": "SONM-IO StandardToken doesn't simulate OZ ERC20",
-    "source": "Token/ERC20-SONM-IO/StandardToken.sol",
+    "description": "ERC20 bokkypoobah simulates OZ ERC20",
+    "source": "Token/ERC20-bokkypoobah/MyToken.sol",
     "target": "Token/ERC20-openzeppelin/ERC20.spec.sol",
     "states": 173,
     "unsigned-integers": 2,

@@ -1,5 +1,7 @@
 pragma solidity ^0.5.0;
 
+import './original/SafeMath.sol';
+
 
 /**
  * @dev Implementation of the {IERC20} interface.
@@ -26,6 +28,8 @@ pragma solidity ^0.5.0;
  * allowances. See {IERC20-approve}.
  */
 contract ERC20_spec {
+
+    using SafeMath_spec for uint256;
 
     event Transfer(address indexed from, address indexed to, uint256 value);
     event Approval(address indexed owner, address indexed spender, uint value);
@@ -72,10 +76,8 @@ contract ERC20_spec {
     function transfer(address to, uint val) public {
         require(msg.sender != address(0));
         require(to != address(0));
-        require(balances[msg.sender] >= val);
-	    balances[msg.sender] = balances[msg.sender] - val;
-	    balances[to] = balances[to] + val;
-
+	    balances[msg.sender] = balances[msg.sender].sub(val);
+	    balances[to] = balances[to].add(val);
     }
 
 
@@ -87,7 +89,7 @@ contract ERC20_spec {
     function approve(address to, uint val) public {
         require(msg.sender != address(0));
         require(to != address(0));
-	    allowances[msg.sender][to] = val;
+	    allowances[msg.sender][to] = allowances[msg.sender][to] = val;
         emit Approval(msg.sender, to, val);
     }
 
@@ -106,11 +108,12 @@ contract ERC20_spec {
         @notice modifies allowances[from][msg.sender] */
 
     function transferFrom(address from, address to, uint val) public {
-        require(allowances[from][msg.sender] >= val);
-        require(balances[from] >= val);
-	    balances[from] = balances[from] - val;
-	    balances[to] = balances[to] + val;
-	    allowances[from][msg.sender] = allowances[from][msg.sender] - val;
+        require(msg.sender != address(0));
+        require(to != address(0));
+        require(from != address(0));
+	    balances[from] = balances[from].sub(val);
+	    balances[to] = balances[to].add(val);
+	    allowances[from][msg.sender] = allowances[from][msg.sender].sub(val);
     }
 
 
@@ -124,8 +127,7 @@ contract ERC20_spec {
     function increaseAllowance(address spender, uint val) public {
         require(msg.sender != address(0));
         require(spender != address(0));
-        require(allowances[msg.sender][spender] + val >= allowances[msg.sender][spender]);
-	    allowances[msg.sender][spender] = allowances[msg.sender][spender] + val;
+	    allowances[msg.sender][spender] = allowances[msg.sender][spender].add(val);
         emit Approval(msg.sender, spender, allowances[msg.sender][spender]);
     }
 
@@ -140,20 +142,19 @@ contract ERC20_spec {
     function decreaseAllowance(address spender, uint val) public {
         require(msg.sender != address(0));
         require(spender != address(0));
-        require(allowances[msg.sender][spender] >= val);
-	    allowances[msg.sender][spender] = allowances[msg.sender][spender] - val;
+	    allowances[msg.sender][spender] = allowances[msg.sender][spender].sub(val);
         emit Approval(msg.sender, spender, allowances[msg.sender][spender]);
     }
 
 
-  /**  @notice precondition to != address(0)
+  /**   @notice precondition to != address(0)
         @notice precondition balances[to] + val >= balances[to]
         @notice postcondition balances[to] == __verifier_old_uint(balances[to]) + val
         @notice modifies balances[to]
     */
     function mint(address to, uint val) public {
         require(to != address(0));
-	    balances[to] = balances[to] + val;
+	    balances[to] = balances[to].add(val);
         emit Transfer(address(0), to, val);
     }
 
@@ -166,8 +167,7 @@ contract ERC20_spec {
     */
     function burn(address from, uint val) public {
         require(from != address(0));
-        require(balances[from] >= val);
-	    balances[from] = balances[from] - val;
+	    balances[from] = balances[from].sub(val);
         emit Transfer(from, address(0), val);
     }
 }
