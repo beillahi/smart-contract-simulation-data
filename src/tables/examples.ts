@@ -1,10 +1,10 @@
 import { IData } from "../data";
 import { perExampleGroup } from "../examples";
 import { ITableSpec } from "../specs";
-import { dist } from "../utils";
+import { dist, msToS } from "../utils";
 
 const name = "examples";
-const columns = { contracts: "l", transactions: "l", traces: "l", states: "l", positive: "l", negative: "l" };
+const columns = { contracts: "l", transactions: "l", traces: "l", states: "l", positive: "l", negative: "l", time: "l" };
 
 export default async function(data: IData): Promise<ITableSpec<keyof typeof columns>> {
     const rows = await perExampleGroup(async (group) => {
@@ -17,7 +17,8 @@ export default async function(data: IData): Promise<ITableSpec<keyof typeof colu
         const transactions = dist(await examples.get((({ transactionHistory: { length } }) => length)).values());
         const positive = dist(await examples.get((({ examples: { positive: { length } }}) => length)).values());
         const negative = dist(await examples.get((({ examples: { negative: { length } }}) => length)).values());
-        return { contracts, transactions, traces, states, positive, negative };
+        const time = dist((await metrics.get(({ examplesTime: { value } }) => value).values()).map(msToS));
+        return { contracts, transactions, traces, states, positive, negative, time };
     });
     return { name, columns, rows };
 }
