@@ -1,9 +1,0 @@
-{
-    "description": "0x4f9048d95616dbf7acc16fc4179f5ac6ee37bce6 Lottery doesn't simulate canonical Lottery",
-    "source": "Games/0x4f9048d95616dbf7acc16fc4179f5ac6ee37bce6/Lottery-impl.sol",
-    "target": "Games/Lottery/Lottery-spec.sol",
-    "states": 31,
-    "num-accounts": 0,
-    "num-examples": 370,
-    "payments": 2
-}

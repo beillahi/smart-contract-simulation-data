@@ -1,8 +1,0 @@
-{
-    "description": "ERC20 bokkypoobah simulates OZ ERC20",
-    "source": "Token/ERC20-bokkypoobah/MyToken.sol",
-    "target": "Token/ERC20-openzeppelin/ERC20.spec.sol",
-    "states": 173,
-    "unsigned-integers": 2,
-    "num-accounts": 0
-}

@@ -1,5 +1,5 @@
 {
-    "description": "ERC20-moloch with initialized total supply simulates OZ ERC20 with initialized total supply",
+    "description": "ERC20-moloch with initial total supply simulates OZ ERC20 with initial total supply",
     "source": "Token/ERC20-molochventures/ERC20.impl.original.sol",
     "target": "Token/ERC20-openzeppelin/ERC20.spec.constructor.sol",
     "states": 23,
